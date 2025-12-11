@@ -65,8 +65,8 @@ The short way:
 	ls *R1.fastq.gz | cut -d "_" -f 1 > seqlist
 	for filn in `cat seqlist`; do trim_galore -q 30 --length 100 --trim-n --paired $filn"_R1_001.fastq.gz" $filn"_R2_001.fastq.gz"; done
 
-> Here, we are listing all R1 fastq files and cutting them on the underscore delimiter to take the first field, which is the
-> base name for each PE fastq file. We then save that output to a file called 'seqlist.'  You can `cat` the seqlist file to see the results.
+> Here, we are listing all R1 fastq files and cutting them on the underscore delimiter to take the first field, which is the base name for each PE fastq file.
+> We then save that output to a file called 'seqlist.'  You can `cat` the seqlist file to see the results.
 > The next command is the for loop.  Instead of looping through files one-by-one, we are looping through the 'seqlist' file line-by-line
 > to obtain the basename of each PE run. The back ticks represent a subprocess. The output of the subprocess command `cat` is being passed
 > to the for loop.  Thus, each basename in our 'seqlist' file becomes a variable.  We then use this basename to specify the R1 and R2 fastq files
@@ -100,8 +100,8 @@ Quantify transcript abundance.
 
 	for filn in `cat seqlist`; do salmon quant -i salmon_index -l A -1 $filn"_R1_val_1.fq.gz" -2 $filn"_R2_val_2.fq.gz" --validateMappings -o "salmon_quant/"$filn; done
 	
-> The `quant` command allows direct quantification of reads agains the 'transcriptome' index and will output the results into a directory called 'salmon_quant.'
-> The tab-delimited output files (sf files) for each library will be in a subdirectory named by the basename of the file.  
+> The `quant` command allows direct quantification of reads agains the 'transcriptome' index and will output the results into a directory called 'salmon_quant.' <br>
+> The tab-delimited output files (sf files) for each library will be in a subdirectory named by the basename of the file.  <br>
 > The `-l` option specifies the automatic detection of the library type.  The `--validateMappings` option is the recommended default.  It essentially checks that the mappings are plausible enough to be quantified.
 
 
@@ -125,10 +125,10 @@ Navigate to the location of your reference coding sequence file, which should no
 	cd ~/rnaseq_workshop/salmon_analyses
 	grep ">" pa14_cds.fna | sed "s/>//" | sed "s/\(.*\)/\1\t\1/" > tx2gene.txt
 	
-> The tilde `~` in the `cd` command is a shorthand way of specifying your home directory.
-> The `grep` command grabs all the definition lines from our reference transcript file
-> The first `sed` command removes the `>` symbol, as it is not part of our transcript name
-> The second `sed` command searches for any number of characters any number of times with `.*`, which represents each locus tag and saves that information with the special parenthetical notation
-> We recall the locus tag twice in our replacement command with `\1` and separate the transcript name from the gene name with a tab `\t`.
-> You can manually add the headers `TXNAME` and `GENEID` in `nano` and save the output.
+> The tilde `~` in the `cd` command is a shorthand way of specifying your home directory. <br>
+> The `grep` command grabs all the definition lines from our reference transcript file <br>
+> The first `sed` command removes the `>` symbol, as it is not part of our transcript name <br>
+> The second `sed` command searches for any number of characters any number of times with `.*`, which represents each locus tag and saves that information with the special parenthetical notation <br>
+> We recall the locus tag twice in our replacement command with `\1` and separate the transcript name from the gene name with a tab `\t`. <br>
+> You can manually add the headers `TXNAME` and `GENEID` in `nano` and save the output. <br>
 
