@@ -6,7 +6,7 @@ RNA-Seq analyses are often employed to determine the differential gene expressio
 Two common strategies to quantify gene expression are 1) to map reads to a reference genome and count the reads that overlap genic coordinates or 
 2) to quantify the reads that map to transcripts. When no reference assembly is available, a de novo transcriptome assembly is generated and reads are mapped back to it for quantification purposes. 
 
-Here we are studying the effects of deleting the pqsE gene on overall gene expression in Pseudomonas aeruginosa (data generously provided by the Paczkowski lab).
+Here we are studying the effects of deleting the pqsE gene on overall gene expression in _Pseudomonas aeruginosa_ (data generously provided by the Paczkowski lab).
 PqsE directly interacts with the RhlR transcription factor, which is involved in the quorum sensing cascade and in activating genes required for
 pathogenesis and biofilm formation. The Paczkowski lab demonstrated that PqsE complexed with RhlR enhanced binding affinity of RhlR target promoters and
 increased transcription of genes encoding virulence factors associated with pathogenesis.
@@ -40,12 +40,12 @@ You can generate a summmary of the quality of your data with [fastQC](https://ww
 [SeqKit](https://bioinf.shenwei.me/seqkit/) for a more pared-down summary of our data.
 
 	cd fastq/
-	seqkit stats 222-6H-S3-1_S2_R1_001.fastq.gz
- 	seqkit stats 222-6H-S3-1_S2_R2_001.fastq.gz
+	seqkit stats wt-1-R1.fastq.gz
+ 	seqkit stats wt-1_R2.fastq.gz
  	
 Or you can run stats on both files at the same time
 
-	seqkit stats 222*gz -T | csvtk pretty -t
+	seqkit stats wt-1*gz -T | csvtk pretty -t
 
 ## Clean your reads with [TrimGalore](https://github.com/FelixKrueger/TrimGalore).
 
@@ -53,34 +53,32 @@ You can process your PE fastqs one-by-one or you could execute a BASH for-loop t
 
 The long way:
 
-	trim_galore -q 30 --length 100 --trim-n --paired 222-6H-S3-1_S2_R1_001.fastq.gz 222-6H-S3-1_S2_R2_001.fastq.gz
+	trim_galore -q 30 --length 100 --trim-n --paired wt-1_R1.fastq.gz wt-1_R2.fastq.gz
 
 > TrimGalore will automatically detect the sequencing adapter and trim it from our reads. <br>
 > We also trim reads to a PHRED quality score of 30 (1/1000 chance of being a miscalled base), remove ambiguous bases, and only retain reads with a minimum length of 100 bp. <br>
-> The `paired` option keeps R1 and R2 reads together, which is necessary for most mapping software. <br>
-> Other popular read trimming software include [fastp](https://github.com/OpenGene/fastp) and [Trimmomatic](https://github.com/usadellab/Trimmomatic)
+> The `--paired` option keeps R1 and R2 reads together, which is necessary for most mapping software. <br>
+> Other popular read trimming programs include [fastp](https://github.com/OpenGene/fastp) and [Trimmomatic](https://github.com/usadellab/Trimmomatic)
 
 The short way:
 
 	ls *R1.fastq.gz | cut -d "_" -f 1 > seqlist
-	for filn in `cat seqlist`; do trim_galore -q 30 --length 100 --trim-n --paired $filn"_R1_001.fastq.gz" $filn"_R2_001.fastq.gz"; done
+	for filn in `cat seqlist`; do trim_galore -q 30 --length 100 --trim-n --paired $filn"_R1.fastq.gz" $filn"_R2.fastq.gz"; done
 
-> Here, we are listing all R1 fastq files and cutting them on the underscore delimiter to take the first field, which is the base name for each PE fastq file.
-> We then save that output to a file called 'seqlist.'  You can `cat` the seqlist file to see the results.
-> The next command is the for loop.  Instead of looping through files one-by-one, we are looping through the 'seqlist' file line-by-line
-> to obtain the basename of each PE run. The back ticks represent a subprocess. The output of the subprocess command `cat` is being passed
-> to the for loop.  Thus, each basename in our 'seqlist' file becomes a variable.  We then use this basename to specify the R1 and R2 fastq files
-> by filling in the reminder of the unique part of each PE file's name.  For example, `$filn` will get interpreted as 'cont1' and the file endings
-> "\_1.fastq" and "\_2.fastq" will be interpreted literally because of the quotation marks so that we get the full file names, 
-> 'cont1_1.fastq' and 'cont1_2.fastq'.
+> Here, we are listing all R1 fastq files and cutting them on the underscore delimiter to take the first field, which is the base name for each PE fastq file (For example, wt-1). <br>
+> We then save that output to a file called 'seqlist.'  You can `cat` the seqlist file to see the results. <br>
+> The next command is the for loop.  Instead of looping through files one-by-one, we are looping through the 'seqlist' file line-by-line to obtain the basename of each PE library. <br>
+> The back ticks represent a subprocess. The output of the subprocess command `cat` is being passed to the for-loop.  <br>
+> Thus, each basename in our 'seqlist' file becomes a variable.  We then use this basename to specify the R1 and R2 fastq files by filling in the reminder of the unique part of each PE file's name. <br>
+> For example, `$filn` will get interpreted as 'wt-1' and the file endings "\_R1.fastq.gz" and "\_R2.fastq.gz" will be interpreted literally because of the quotation marks, which gives us the full file names: 'wt-1_R1.fastq.gz' and 'wt-1_R2.fastq.gz'.
 
 <br>
 
 
 ## Quantify transcripts with Salmon
 
-[Salmon](https://combine-lab.github.io/salmon/) is a 'wicked fast' program that allows the direct quantification of reads against a transcriptome (no need for SAM or BAM files). 
-Because we don't have a transcriptome (we did not perform a de-novo assembly of our reads), we'll use the coding sequences that we downloaded as a substitute.
+[Salmon](https://combine-lab.github.io/salmon/) is a 'wicked fast' program that allows the direct quantification of reads against a transcriptome (no need for an initial read mapping step). 
+We'll use the coding sequences that we downloaded as our transcripts.
 
 To make typing downstream commands easier, let's move our reference coding sequence fasta file and our trimmed read files to a new directory.
 
@@ -105,9 +103,8 @@ Quantify transcript abundance.
 > The `-l` option specifies the automatic detection of the library type.  The `--validateMappings` option is the recommended default.  It essentially checks that the mappings are plausible enough to be quantified.
 
 
-The Salmon output files required for downstream analyses are the quant.sf files. 
-The sf file is a tab delimited text file containing the length and effective length of each transcript (effective length relating to the
-expectation of sampling more or less reads from a transcript) and the normalized TPM (transcripts per million) and read count values.
+The Salmon output files required for downstream analyses are the `quant.sf` files. 
+The sf file is a tab delimited text file containing the length and effective length of each transcript (effective length relating to the expectation of sampling more or less reads from a transcript) and the normalized TPM (transcripts per million) and read count values.
 The TPM values are referred to as pseudocounts and need to be non-normalized for DESeq2 analyses.
 
 ## Generate a table that associates transcripts with genes.
@@ -126,9 +123,9 @@ Navigate to the location of your reference coding sequence file, which should no
 	grep ">" pa14_cds.fna | sed "s/>//" | sed "s/\(.*\)/\1\t\1/" > tx2gene.txt
 	
 > The tilde `~` in the `cd` command is a shorthand way of specifying your home directory. <br>
-> The `grep` command grabs all the definition lines from our reference transcript file <br>
-> The first `sed` command removes the `>` symbol, as it is not part of our transcript name <br>
-> The second `sed` command searches for any number of characters any number of times with `.*`, which represents each locus tag and saves that information with the special parenthetical notation <br>
+> The `grep` command grabs all the definition lines from our reference transcript file. <br>
+> The first `sed` command removes the `>` symbol, as it is not part of our transcript name. <br>
+> The second `sed` command searches for any number of characters any number of times with `.*`. This represents each locus tag, which are saved via the special parenthetical notation. <br>
 > We recall the locus tag twice in our replacement command with `\1` and separate the transcript name from the gene name with a tab `\t`. <br>
 > You can manually add the headers `TXNAME` and `GENEID` in `nano` and save the output. <br>
 
