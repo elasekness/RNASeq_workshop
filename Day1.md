@@ -76,7 +76,8 @@ Rename a file or directory. You can rename a file or directory with the `mv` (mo
 
 	mv reference reference_db
 
-> **`mv`** = move. Renaming files with `mv` will overwrite any existing file.  
+> **`mv`** = move. <br>
+> Renaming files with `mv` will overwrite any existing file.  
 
 <br>
 
@@ -101,8 +102,8 @@ Change (move) to a different directory.
 <br>
 
 Now try copying files from one directory to another.  Here we will copy the fastq files required for our future RNASeq analysis.
-We will copy R1 and R2 read files from two experimental treatments, each having two replicates, from `/home/rnaseq_workshop/fastq` to your `fastq` directory. 
-We will have to specify the path to these files.  We can specify an absolute path, which is the location
+We will copy R1 and R2 paired-end read files from two conditions (a control and an experimental treatment), each having two replicates, from `/home/rnaseq_workshop/fastq` to your `fastq` directory. 
+To copy them, we can specify an absolute path, which is the location
 of these files with respect to the root directory (i.e. going through the entire filesystem to get to your file) or a relative path, which is
 where these files are located with respect to your current working directory (i.e. where you are when you enter `pwd`).
 
@@ -110,22 +111,22 @@ where these files are located with respect to your current working directory (i.
 
 Let's try using absolute and relative paths.
 
-	cp /home/rnaseq_workshop/fastq/222-6H-S3-2_S6_R2_001.fastq.gz .
+	cp /home/rnaseq_workshop/fastq/wt-1_R1.fastq.gz .
 
 > **`cp`** = copy. <br>
-> Here we used the absolute path to copy the fastq file `222-6H-S3-2_S6_R2_001.fastq.gz` to `.`, which represents our current location.
+> Here we used the absolute path to copy the fastq file `wt-1_R1.fastq.gz` to `.`, which represents our current location.
 > Since we cd'ed into `fastq` in our previous command, this should be our current location.
-> It's always good to check that your commands worked. You can `ls` your current directory to see that the fastq file copied.
+> It's always good to check that your commands worked. `ls` your current directory to see that the fastq file copied.
 
 <br>
 
 Now use a relative path to copy the fastq file to where you are. This will simply overwrite the exisiting file.
 
-	cp ../../../rnaseq_workshop/fastq/222-6H-S3-2_S6_R2_001.fastq.gz .
+	cp ../../../rnaseq_workshop/fastq/wt-1_R1.fastq.gz .
 
 > Notice that we had to move up three directories to get to `rnaseq_workshop`. <br>
 > Also notice that we must always specify an end location for our copied files, which is our current location: `.`. 
-> However, if we specified `newfile` instead of `.`, the contents of `222-6H-S3-2_S6_R2_001.fastq.gz` would be written to newfile in our current location.
+> If we specified `new-fastq_R1.fastq.gz` instead of `.`, the contents of `wt-1_R1.fastq.gz` would be written to this new file in our current location.
 
 <br>
 
@@ -133,13 +134,13 @@ You could continue to copy each file individually, or we could copy all our fast
 
 	cp /home/rnaseq_workshop/fastq/*gz .
 
-> The star character has special meaning.  It represents any character any number of times
-> Given the syntax above, I am copying any file with a gz ending from the fastq subdirectory
+> The **star/asterisk** has special meaning.  It represents any character any number of times
+> Given the syntax above, I am copying any file with a gz ending from the fastq subdirectory to my current directory.
 > Other metacharacters are described at the end of this tutorial.
 
 <br>
 
-You can also copy the entire rnaseq_workshop directory and all of its contents to your home directory.
+You can also copy the entire rnaseq_workshop directory and all of its contents to your home directory. Don't do this.
 
 	cp -r /home/rnaseq_workshop/ .
 	
@@ -212,9 +213,9 @@ Display the first ten lines of your file.
 	head programs.txt
 
 > **`head`** displays the first ten lines by default but you can specify the number of lines with a flag. <br>
-> For example, **`head -200 programs.txt`** will display the first two hundred lines of your file. In general, most
-> commands have additional arguments (or flags) associated with them. <br>
-> You can see the different usage statements by typing the command with a **`-help`** or **`--help`** option.
+> For example, **`head -200 programs.txt`** will display the first two hundred lines of your file. <br>
+> In general, most commands have additional arguments (or flags) associated with them. <br>
+> You can see the different usage statements by typing the command with a **`-help`** or **`--help`** option depending on the program.
 
 <br>
 
@@ -259,16 +260,12 @@ Remove a file. Let's remove files we don't need.
 
 ## Notes on working in a Linux environment
 
-
-* Avoid creating file names and directories with spaces. Use underscores, dashes, or periods instead to separate multi-part names.
-* Spaces need to be escaped in Linux (more on that later).  For example, if you tried to make a directory called “my directory”,
-* mkdir would make two directories, `my` and `directory`.
-* Use autocomplete for speedier typing and to avoid typos.  Autocomplete will fill in the unique part of a command or file.
-For example, if I had only one file in my directory that began with a “b,” I could type `b` and then press the tab key to autocomplete the name of the directory.
-* Everything in Linux is case sensitive
-* Can’t find a command?
-Try `which` to see if the command is in your path – whether the command is in a location that the computer searches for executing commands.
+* Use **autocomplete** for speedier typing and to avoid typos.  Autocomplete will fill in the unique part of a command or file. For example, if I had only one file in my directory that began with a “b,” I could type `b` and then press the tab key to autocomplete the name of the directory.
 * Hit the up-arrow key to recall a command you entered previously.
+* Everything in Linux is case sensitive.
+* Avoid creating file names/directories with spaces. Use underscores, dashes, or periods instead to separate multi-part names.
+* Spaces need to be escaped (more on that later).  For example, if you tried to make a directory called “my directory”, you would get two directories, `my` and `directory`.
+* Can’t find a command? Try `which` to see if the command is in your path – whether the command is in a location that the computer searches for executing commands.
 
 <br>
 
@@ -276,9 +273,7 @@ Try `which` to see if the command is in your path – whether the command is in 
 
 
 There are several sequence databases – NCBI, JGI, EMBL - that you might encounter.
-You might want to explore each of these to familiarize yourself with the resources they offer.
-We will focus on NCBI.  Our goals are to download reference genome and reference coding sequence files to which we will map our reads.
-We can accomplish this several ways.  Here will will download sequences from the webpage and download sequences directly to our VMs with the E-Utilities and datasets functions installed on your VM.
+We will focus on NCBI.  Our goals are to download reference genome and reference coding sequence files to which we will map our reads. We can accomplish this several ways.  Here will will download sequences directly to our VMs with the E-Utilities and datasets functions installed on your VM.
 
 
 Navigate to NCBI’s homepage: [https://www.ncbi.nlm.nih.gov/](https://www.ncbi.nlm.nih.gov/)
@@ -286,14 +281,13 @@ Navigate to NCBI’s homepage: [https://www.ncbi.nlm.nih.gov/](https://www.ncbi.
 
 > Notice that there are options to submit sequences, download sequences, and even analyze data. <br>
 > There is also an option to submit sequences to the BLAST server.
-> BLAST is an alignment tool to look for sequences that are similar (a proxy for homology) to your queries, which we will be using later.
+> BLAST is an alignment tool to look for sequences that are similar (a proxy for homology) to your queries.
 
 
 Choose 'Assembly' under the top left pull-down menu (set to 'All Databases' by default). We can use BOOLEAN search terms (such as AND, OR, and NOT) to make our search more specific.
 For now, simply type "pseudomonas aeruginosa UCBPP-PA14"  How many entries are returned?
 If we didn't know the genome or assembly accession, we could use the filter drop-down menu to narrow our search. From the "filters" menu, specify that you want genomes with annotation and those 
-that are completely assembled.  This now returns one assembly. Clicking the assembly link associated with this strain brings you to a page with additional information
-about this assembly, including various ways to download the genome and associated data.  Notice that there are GenBank and RefSeq versions of this assembly even though it is the same genome.
+that are completely assembled.  This now returns one assembly. Clicking the assembly link associated with this strain brings you to a page with additional information, including various ways to download the genome and associated data.  Notice that there are GenBank and RefSeq versions of this assembly even though it is the same genome.
 
 We can download the genome in fasta file format to our computers using the 'download' option at the top left of the page.
 However, we would then need to transfer this file from our computers to a GCP storage bucket and from the storage bucket to our VM. 
@@ -311,13 +305,12 @@ Return to your VM terminal, navigate to your `reference_db` directory, and type:
 
 <br>
 
-We can use the genome accession associated with the assembly to download the Pa14 genome.  You can obtain this accession by going back to the assembly page for Pa14 and clicking
-the link "view GenBank sequences." This takes you to the genome page where the accession listed is as "CP000438." 
+We can use the genome accession associated with the assembly to download the Pa14 genome.  You can obtain this accession by going back to the assembly page for Pa14 and clicking the link "view GenBank sequences." This takes you to the genome page where the accession listed is as "CP000438." 
 
 	efetch -db nuccore -id CP000438 -format fasta > pa14.fasta
 	
-> We are fetching the nucleotide sequence for the Pa14 genome from the core nucleotide database in fasta format
-> Remember that STDOUT is output from a command that gets printed to your screen while the `>` symbol redirects this output to a file (pa14.fasta in this case)
+> This fetches the nucleotide sequence for the Pa14 genome from the core nucleotide database in fasta format.
+> Remember that STDOUT is output from a command that gets printed to your screen while the `>` symbol redirects this output to a file (pa14.fasta).
 
 <br>
 
@@ -325,7 +318,7 @@ We need to specify a different output format to download the coding sequences as
 
 	efetch -db nuccore -id CP000438 -format fasta_cds_na > pa14_cds.fasta
 	
-> If we didn't have a genome/nucleotide accession, we could query the nucleotide core database with the `esearch` command first and pass that information to `efetch`.
+> If we didn't have a genome/nucleotide accession, we could query the nucleotide core database with the `esearch` command first and pass that information to `efetch` using a pipe.
 
 <br>
 
@@ -336,7 +329,7 @@ Typing **`datasets download`** will give you additional information regarding th
 	datasets download genome accession GCA_000014625.1 --include genome,cds
 	
 > This command will download the GenBank version of the Pa14 assembly as well as the coding sequences in fasta format.
-> By default, data are saved to a zipped folder entitled "ncbi_dataset."  To inflate its contents, simply type `unzip ncbi_dataset`.
+> Data are saved to a zipped folder entitled "ncbi_dataset" by default.  To inflate its contents, simply type `unzip ncbi_dataset`.
 > If you `ls` the directory structure, you'll see that your files are here: `ncbi_dataset/data/GCA_000014625.1/`.
 
 <br>
@@ -380,7 +373,8 @@ Grab the first 5 header lines from your fasta file with `grep` and a pipe.
 
 > Here we are using a pipe, designated by **`|`** to capture the output of grep and pass it to another command (**`head`**).
 > Piping is a really useful skill to learn for parsing and processing data more efficiently. <br>
-> Note that you can string many pipes together, if necessary. As is the case for most operations conducted in Linux, there are multiple ways to do things. <br>
+> Note that you can string many pipes together, if necessary. <br>
+> As is the case for most operations conducted in Linux, there are multiple ways to do things. <br>
 > Use the manual page for grep to find an alternative way to obtain the first five header lines (**`man grep`**).
 
 <br>
@@ -390,13 +384,12 @@ Count the number of sequences in the fasta file using a pipe to `wc` instead.
 	grep ">" cds_from_genomic.fna | wc -l
 
  > Here we are passing the output of **`grep`** to the word count command, **`wc`**.  The **`-l`** argument specifies that we want to count lines. <br>
- > Again, there is more than one way to achieve the same outcome in Linux.
-
+ 
 <br>
 
-You'll notice that the definition lines or sequence names are quite long and include the chromosome accession, the coding sequence GenBank accession, the locus tag, the protein description, and more.
+You'll notice that the definition lines or sequence names are quite long and include the chromosome accession, the coding sequence accession, the locus tag, the protein description, and more.
 For our purposes, we want to define our genes by the locus_tag.  Without the use of regular expressions and the `sed` command, modifying this file would be incredibly difficult and tedious.
-Use **`sed`** to rename the definition lines of your fasta file so that only the locus tags remain. But first, `grep` the definition lines so that you can view your changes more easily.
+Use **`sed`** to rename the definition lines of your fasta file so that only the locus tags remain. But first, **`grep`** the definition lines so that you can view your changes more easily.
 
 
 	grep ">" cds_from_genomic.fna | sed "s/>.*locus_tag=\(PA14_.....\)\].*/>\1/"
@@ -404,19 +397,18 @@ Use **`sed`** to rename the definition lines of your fasta file so that only the
 > **`sed`** = stream editor.  **`sed`** is essentially a search and replace function. <br>
 > Like **`grep`**, we can search for complicated patterns when we use this command with regular expressions. Unlike `grep`, we can replace these complicated patterns with another. <br>
 > The syntax for the search and replace command is **`'s/search pattern/replacement pattern/'`** where the 's' stands for substitute. <br>
-> Although the definition lines are unique, the formatting is consistent, allowing us to search for a general pattern and replace it with a new one <br>
+> Although the definition lines are unique, the formatting is consistent, allowing us to search for a general pattern and replace it with a new one. <br>
 > In other words, we can use a regular expression to replace all of the patterns displayed in the sequence names without having to search for each pattern individually by employing our special metacharacters. <br>
 > Like **`grep`**, **`sed`** will search for your pattern line by line. It will make a replacement once (unless you specify otherwise, see the manual page). <br>
 > Here we start our search by specifying that we are looking for lines with a ">" followed by any character `.` any number of times `*`.  This is followed by the 'locus_tag=' expression. <br>
-> To search for a literal period or star, we would have to exit out of the metacharacter with a backslash: `\.` and `\*`.
+> To search for a literal period or star, we would have to exit out of or escape the metacharacter with a backslash: `\.` and `\*`.
 > The `\` in front of the parentheses give the parentheses a special meaning.  It is a way of grouping information and saving it for recall later. <br>
-> With our special parenthetical notation, we are saving the locus tag information, which we notate as `PA14_.....`, where the periods represent any character once for the five digits associated with the tag <br>  
+> With our special parenthetical notation, we are saving the locus tag information, which we notate as `PA14_.....`, where the periods represent any character once for the five digits associated with the tag. <br>  
 > We could also specify the digits of the locus tag like this: `[0-9]*` where brackets specify a range of numbers or characters and the asterisk specifies any number of times. <br>
-> The final part of the expression: `\].*` encompasses everything after the locus tag information in the definition line. Anything not saved in the parentheses will be replaced by our replacement expression <br>
-> The replacement expression adds the ">" back to the definition line and recalls the information grouped in the parenthesis with `\1`, where the backslash essentially makes the one a special character recalling the stored information.<br>
+> The final part of the expression: `\].*` encompasses all information after the locus tag in the definition line. Anything not saved in the parentheses will be replaced by our replacement expression <br>
+> The replacement expression adds the ">" back to the definition line and recalls the information grouped in the parenthesis with `\1`, where the backslash essentially makes the 1 a special character recalling the stored information.<br>
 
-
-If we didn't `grep` the definitions lines first,  `sed` would print your entire document to STDOUT with the replacements made, making it hard to find the changes, which are only in the definition lines.
+If we didn't `grep` the definitions lines first,  `sed` would print your entire document to STDOUT, making it hard to find the changes, which are only in the definition lines.
 
 * How would we check that changes have been made to all of our definition lines and that we aren't missing any anomalies?
 
@@ -424,7 +416,8 @@ Once you know your `sed` command has worked to reformat all definition lines, yo
 
 	sed "s/>.*locus_tag=\(PA14_.....\)\].*/>\1/" cds_from_genomic.fna > pa14_cds.fna
 	
-> We've written the modified content to a new file but you can overwrite the content of the original file in place: `sed "s/>.*locus_tag=\(PA14_.....\)\].*/>\1/" cds_from_genomic.fna > pa14_cds.fna` <br>
+> We've written the modified content to a new file but you can overwrite the content of the original file in place:
+> `sed "s/>.*locus_tag=\(PA14_.....\)\].*/>\1/" cds_from_genomic.fna > pa14_cds.fna` <br>
 > However, writing in place should only be performed if you are sure the modified content is correct.
 
 <br>
@@ -433,7 +426,6 @@ Once you know your `sed` command has worked to reformat all definition lines, yo
 We now have our fastq files and our reference genome and coding sequence files.  We can proceed to read mapping and quantitation.
 
 ## More piping
-
 
 Let's try some more complicated parsing of our data using various Bash commands and pipes. 
 
