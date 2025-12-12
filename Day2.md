@@ -96,16 +96,20 @@ Index the coding sequence file.
 
 Quantify transcript abundance.
 
-	for filn in `cat seqlist`; do salmon quant -i salmon_index -l A -1 $filn"_R1_val_1.fq.gz" -2 $filn"_R2_val_2.fq.gz" --validateMappings -o "salmon_quant/"$filn; done
+	for filn in `cat seqlist`; do salmon quant -i salmon_index -l A -1 $filn"_R1_val_1.fq.gz" -2 $filn"_R2_val_2.fq.gz" --validateMappings -o "$filn; done
 	
 > The `quant` command allows direct quantification of reads agains the 'transcriptome' index and will output the results into a directory called 'salmon_quant.' <br>
-> The tab-delimited output files (sf files) for each library will be in a subdirectory named by the basename of the file.  <br>
+> The tab-delimited output files (sf files) for each library will be in a directory as the basename of the file.  <br>
 > The `-l` option specifies the automatic detection of the library type.  The `--validateMappings` option is the recommended default.  It essentially checks that the mappings are plausible enough to be quantified.
 
 
 The Salmon output files required for downstream analyses are the `quant.sf` files. 
 The sf file is a tab delimited text file containing the length and effective length of each transcript (effective length relating to the expectation of sampling more or less reads from a transcript) and the normalized TPM (transcripts per million) and read count values.
 The TPM values are referred to as pseudocounts and need to be non-normalized for DESeq2 analyses.
+
+All of our sf files are currently named `quant.sf`. Let's use a for-loop to rename them according to the basename of the fastq files.
+
+	for filn in `cat seqlist`; do mv $filn"/quant.sf" $filn".sf"; done
 
 ## Generate a table that associates transcripts with genes.
 
