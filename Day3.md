@@ -37,31 +37,29 @@ Now load the packages in your R session
 
 <br>
 
-## Import your Salmon sf files an summarize transcript read counts for a gene-level analysis.
+## Import your Salmon sf files and summarize transcript read counts for a gene-level analysis.
 
-To perform a DESeq2 analysis we will need our Salmon sf files, our tx2gene.txt file, and a table that specifies the conditions associated with our samples or the experimental design.
+To perform a DESeq2 analysis we will need our Salmon sf files, our `tx2gene.txt` file, and a table that specifies the conditions associated with our samples (the experimental design).
 You can manually create the table in R, Excel (exporting as a tab-delimited text file), or in any text editor, such as `nano`. 
 We'll create this file after we import our sf and tx2gene files.
 
 If you haven't transferred your files from the VM to your computer, you can obtain copies of them here: [data-files](https://github.com/elasekness/RNASeq_workshop/tree/main/data-files)
 
-Import the sf and tx2gene.txt files with the `tximport` function. 
+Import the `sf` and `tx2gene.txt` files with the `tximport()` function. 
 
 	files = file.path(c("wt-1.sf", "wt-2.sf", "pqse-1.sf", "pqse-2.sf"))
 	names(files) <- c("wt1", "wt2", "pqse1", "pqse2")
 	tx2gene = read.table("tx2gene.txt", header=T, sep='\t')
 	txi = tximport(files, type="salmon", tx2gene=tx2gene)
 
-> The first command specifies the file path to our files. <br>
-> The second command names the files.  **These names should be the same and in the same order as our experimental design table** <br>
-> Next, import the tx2gene table, specifying that the table has a header and that columns/fields are separated by tabs. <br>
-> Finally we create the txi object, which will summarize transcript-level abundances to the gene-level. <br>
+> The first command specifies the path to our files. <br>
+> The second command names the files.  **These names should be in the same order as listed in our experimental design table** <br>
+> We import the `tx2gene.txt` file as a table, specifying that it has a header and columns/fields separated by tabs. <br>
+> Finally, we create the txi object, which will summarize transcript-level abundances to the gene-level. <br>
 > In our case, the abundances will not change because the transcripts are equivalent to the genes. <br>
-> **Note** that some provide the option `countsFromAbundance=“lengthScaledTPM”` in the tximport command to remove read count correlation with length.
-> However, the `DESeqDataSetFromTximport` function will do this for us when we create our DESeq2 object.
+> **Note** including the option `countsFromAbundance=“lengthScaledTPM”` in the tximport command removes read count correlation with length as needed for the DESeq2 analysis. However, the `DESeqDataSetFromTximport()` function will do this for us when we create our DESeqDataSet object.
 
-The `txi` object is a list that contains the matrices for abundance (TPM), counts, and length from our sf files. You can get the names of the matrices
-and access the information in the matrices with the following commands.
+The `txi` object contains the matrices for abundance (TPM), counts, and length from our sf files. You can get the names of the matrices and access the information in the matrices with the following commands.
 
 	names(txi)
 	head(txi$counts)
@@ -77,13 +75,13 @@ This file will tell DESeq2 how the data should be analyzed.
 	ColData = data.frame(row.names=1, c("wt1", "wt2", "pqse1", "pqse2"), Condition=c("wt", "wt", "pqse", "pqse"))
 
 > `pqse` is our treatment that will be compared against our wild-type, `wt` control. <br>
-> `row.names=1` specifies that the first column of data should be as the row names.  Without this, R would create numerical row names. <br>
+> `row.names=1` assigns that the first column of data (gene names) as the row names.  Without this, R would create numerical row names. <br>
 
 
 ## Create the DESeqDataSet object.
 
 We will load the data from the txi object and the `ColData` table into the DESEqDataSet object.  
-We also specify that the design forumala can be found in the column entitled `Condition` in  our `ColData` table.
+We will also specify that the design formula can be found in the column entitled `Condition` in  our `ColData` table.
 
 	dds = DESeqDataSetFromTximport(txi, ColData, ~Condition)
 	
@@ -92,25 +90,21 @@ We also specify that the design forumala can be found in the column entitled `Co
 
 Our DESeqDataSet object has specific slots for the different data we provide, including the original count data and the design of the study.
 
-	head(counts(dds)) 
-
-When we normalize our data, a specific slot will be populated with the normalized read counts.
+	head(counts(dds))
+	design(dds)
 
 ## Normalize the read counts.
 
-DESeq2 normalizes read counts with the median of ratios method, which accounts for variable sequencing depth and RNA composition.
-Briefly, the geometric mean for each gene is calculated across all samples and used to generate a gene/geometric mean ratio for each gene in each sample.
-The normalization factor or size factor for each sample is the median of that sample's ratios, which should eliminate the influence of differentially expressed genes
-(as most genes will have a ratio close to 1 because they are not differentially expressed).  Normalized counts are generated by dividing raw counts of a sample
-by its normalization factor.
+DESeq2 normalizes read counts with the median of ratios method, which accounts for variable sequencing depth and RNA composition. Briefly, the geometric mean for each gene is calculated across all samples and used to generate a (gene read count)/(geometric mean) ratio for each gene in each sample.
+The normalization factor or size factor for each sample is the median of that sample's ratios, which should eliminate the influence of differentially expressed genes.  Normalized counts are generated by dividing raw counts of a sample
+by its normalization or size factor.
 
 
 We need only one function call to calculate the size factors and perform the normalization.
 
-
 	dds <- estimateSizeFactors(dds)
 
-> Normalized read counts are now saved back to the dds object in a specific slot. <br>
+> Normalized read counts are now saved back to the dds object. <br>
 
 We can retrieve the size factors with the following command:
 
@@ -138,14 +132,14 @@ for genes that contribute most to the variation in PC1 and PC2.
 
 	plotPCA(rld, intgroup="Condition")
 	
-> We are coloring by the values in `Condition`.  If we had additional variables, such as sex, time, or stain, we could include these in our design and color the samples accordingly to determine which best explain the variation we see in PC1 and PC2.
+> We are coloring by the values in `Condition`.  If we had additional variables, such as sex, time, or stain, we could include these in our design and color the samples accordingly to determine which variables best explain the variation we see in PC1 and PC2.
 
 * Based on your PCA plot, do you think we have good replicates?
-* Do you think we will get many differentially expressed genes?
+* How do you think this will influence the number of differentially expressed genes we are able to detect?
 
 
 You could also plot the normalized read counts of replicates against each other.
-Ideally, all points would be close to or on the 45 degree line, indicating a 1:1 ratio of expression between values.
+Ideally, all points would be close to or on the 45 degree line, indicating a 1:1 ratio of expression between replicates.
 
 	normalized_counts = counts(dds, normalize=T)
 	plot(normalized_counts$wt1, normalized_counts$wt2)
@@ -158,7 +152,7 @@ Or we can make a heatmap showing the correlation of expression values across sam
 	
 > The first command retrieves the matrix of log-transformed values from the rld object. <br>
 > The second command generates the pairwise correlations among samples. <br>
-> The third command uses the pheatmap function from the pheatmap package to make a heatmap, adding annotations from our ColData table. <br>
+> The third command uses the pheatmap() function from the pheatmap package to make a heatmap, adding annotations from our ColData table. <br>
 
 ## Perform the differential expression analysis.
 
@@ -169,12 +163,12 @@ This requires a single function that is really performing multiple steps, includ
 > DESeq2 uses a negative binomial distribution to model the read count data, which accounts for the fact that variance > mean (overdispersion).
 
 DESeq2 uses the Wald test to determine whether the expression changes observed across treatments are statistically significant 
-(the null hypothesis being that there is no change in expression between two conditions as measure by the log-fold change).
+(the null hypothesis being that there is no change in expression between two conditions as measured by the log-fold change).
 
 	res = results(dds, contrast=c("Condition", "pqse", "wt"))
 	write.table(res, file="pqsE-vs-wt-results.txt", sep='\t', quote=F, col.names=NA)
 	
-> The `results()` function performs the hypothesis testing for us using the information in the dds object and the comparison of the `pqse` condition to the `wt`.
+> The `results()` function performs the hypothesis testing for us, comparing `pqse` to `wt`.
 > **Note** the order of the sample names in the contrast is important. 
 > The `res` object can be saved as a table for further inspection.
 
