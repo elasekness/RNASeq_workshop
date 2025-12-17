@@ -24,7 +24,7 @@ We will use KEGG to annotate our genes (assign K numbers) and `clusterProfiler` 
 Enrichment analyses identify pathways or gene categories that have a higher proportion of differentially expressed genes than by chance alone.
 We calculate pathway enrichment by dividing the proportion of DEGs in our pathway (DEGs in pathway/total number of genes in pathway) by the proportion of DEGs in our dataset (total number of annotated DEGs/total number of annotated genes) or our background gene set.  
 We can test the null hypothesis with the hypergeometric test that determines the probability of getting k or more number of DEGs inside a gene set based on the hypergeometric distribution (a discrete probability distribution that describes the number of successes in a series
-of draws from a finite population without replacement). **Note that the hypergeometric test is equivalent to a one-tailed Fisher's exact test**
+of draws from a finite population without replacement). **Note that the hypergeometric test is equivalent to a one-tailed Fisher's exact test.**
 
 # Generate a vector of differentially expressed genes based on your DESeq2 results
 
@@ -42,10 +42,8 @@ Filter the table based on adjusted p-value and log2fold change using base R func
 
 	sigDE = res_table[which(res_table$padj <= 0.05 & abs(res_table$log2FoldChange) >=1),]
 	
-We can also filter with functions from the `dplyr` package.
+We can also filter with functions from the `dplyr` package (part of the `tidyverse` package installation.
 
-	install.packages("dplyr")
-	library(dplyr)
 	sigDE <- res_table %>%
   		filter(padj <= 0.05, abs(log2FoldChange) >= 1)
   		
@@ -58,18 +56,18 @@ Conveniently we can generate this from the row names of our `sigDE` table.
 > is.vector() checks the format of our delist object.  It is indeed a vector.
 
 
-# Search for the appropriate genome and its annotation in the KEGG database with the `search_kegg_organism` function of `clusterProfiler`.
+# Search for the appropriate genome and its annotation in the KEGG database.
 
-To run a KEGG pathway enrichment analysis in clusterProfiler, we need to associate the locus tags with KEGG's functional annotation.
-KEGG genomes are referenced with three character codes.  We can search for those associated with Pseudomonas aeruginosa.  
-**The search is case sensitive**
+To run a KEGG pathway enrichment analysis in `clusterProfiler`, we need to associate the locus tags with KEGG's functional annotation.
+KEGG genomes are referenced with three character codes.  We can search for those associated with _Pseudomonas aeruginosa_.  
+**The search is case sensitive.**
 
 	search_kegg_organism("Pseudomonas aeruginosa")
 	
 
-# Perform an enrichment analysis with your vector of DE genes with the `enrichKEGG()` function from `clusterProfiler`.
+# Perform an enrichment analysis with your vector of DE genes.
 
-Now we can select the appropriate code, which is `pau` for `Pseudomonas aeruginosa UCBPP-PA14` and perform our enrichment analysis.
+Now we can select the appropriate code, which is `pau` for `_Pseudomonas aeruginosa UCBPP-PA14_` and perform our enrichment analysis.
 
 	en = enrichKEGG(gene=genes, organism='pau')
 
@@ -84,7 +82,7 @@ The results are in a dataframe with columns for:
 * p.adjust: BH adjusted p-value
 
 
-# Visualize the results with functions from `enrichplot` package.
+# Visualize the results with functions from `enrichplot` package (loaded with `clusterProfiler`.
 
 Visualize the results as a barplot
 
@@ -97,7 +95,7 @@ Visualize the results as a bubbleplot.
 
 	dotplot(en)
 	
-> Here, the gene ratio is represented along the x-axis and the size of the dot corresponds to the number of DE genes in an enriched KEGG category. <br>
+> Here, the gene ratio (DEGs in pathway/annotated genes in pathway) is represented along the x-axis and the size of the dot corresponds to the number of DE genes in an enriched KEGG category. <br>
 > Again, the color indicates the strength of the adjusted p-value. <br>
 	
 * Are these results consistent with our expectations given the contributing role of pqsE in regulating quorum sensing and biofilm formation? <br>
@@ -117,6 +115,16 @@ To convert our locus tags to K numbers, we need to download the KEGG file for ou
 * Click the right-most down arrow to expand the contents of the page, which shows you the locus tag mapped to its gene abbreviation, gene annotation, and associated K number.  
 * You can download this page to a text file by selecting the `Download htext`.  With a little reformatting, you can use this file to convert locus tags to K identifiers.
 
+For now, this step has been done for you.
+
+	ko_list = c("K00077","K00370","K00371","K00373","K00374","K00376","K00763","K01028","K01141","K01183","K01626","K01738","K01895",
+		"K01980","K02047","K02305","K02411","K02415","K02575","K02651","K03638","K04561","K06998","K08738","K11473","K13063","K15864",
+		"K19341","K20258","K20260","K20261","K20262","K21103","K22225","K24843","K24844","K24867")
+	
+	en_ko = enrichKEGG(gene=ko_list, organism="ko")
+	dotplot(en_ko)
+
+* Did our results change?
 
 # Pull a pathway map from KEGG and convert to a graph network with the `KEGGgraph` package.
 
