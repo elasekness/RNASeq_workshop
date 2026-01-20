@@ -16,7 +16,7 @@ The next step in our analyses will be to functionally annotate our genes, assign
 
 These main categories are further subdivided in sub-categories - such as "Carbohydrate" and "Energy" Metabolism -  which are then broken down in to pathways, such as "Citrate acid (TCA) cycle" and "Oxidative phosphorylation."
 
-We will use KEGG to annotate our genes (assign K numbers) and `clusterProfiler` to perform enrichment analyses based on KEGG classifications.
+We will use KEGG to annotate our genes (assign K numbers) and [clusterProfiler](https://github.com/YuLab-SMU/clusterProfiler) to perform enrichment analyses based on KEGG classifications.
 
 Enrichment analyses identify pathways or gene categories that have a higher proportion of differentially expressed genes than by chance alone.
 We calculate pathway enrichment by dividing the proportion of DEGs in our pathway (DEGs in pathway/total number of genes in pathway) by the proportion of DEGs in our dataset (total number of annotated DEGs/total number of annotated genes) or our background gene set.  
@@ -79,7 +79,7 @@ The results are in a dataframe with columns for:
 * p.adjust: BH adjusted p-value
 
 
-# Visualize the results with functions from `enrichplot` package (loaded with `clusterProfiler`.
+# Visualize the results with functions from [enrichplot](https://github.com/YuLab-SMU/enrichplot) package (loaded with [clusterProfiler](https://github.com/YuLab-SMU/clusterProfiler).
 
 Visualize the results as a barplot
 
@@ -123,7 +123,7 @@ For now, this step has been done for you.
 
 * Did our results change?
 
-# Pull a pathway map from KEGG and convert to a graph network with the `KEGGgraph` package.
+# Pull a pathway map from KEGG and convert to a graph network with the [KEGGgraph](https://github.com/Accio/KEGGgraph) package.
 
 	tmp = "pau02024.xml"
 	retrieveKGML(pathwayid="02024", organism='pau', destfile='tmp')
