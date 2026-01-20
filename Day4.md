@@ -133,7 +133,7 @@ For now, this step has been done for you.
 > We can plot the KEGGgraph graph or we can convert it to an `igraph` graph for additional manipulation. <br>
 
 
-# Convert the `KEGGgraph` graph to an `igraph` graph object.
+# Convert the graph to an [igraph](https://igraph.org/) graph object.
 
 	igraph_object = graph_from_graphnel(g)
 	plot(igraph_object, layout=layout_nicely(igraph_object))
