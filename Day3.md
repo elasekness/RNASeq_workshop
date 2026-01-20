@@ -28,6 +28,7 @@ Please also install these other useful packages:
 
 	install.packages("ggplot2")
 	install.packages("pheatmap")
+	install.packages("igraph")
 
 Now load the packages in your R session
 
@@ -37,6 +38,7 @@ Now load the packages in your R session
 	library(ggplot2)
 	library(pheatmap)
 	library(PCAtools)
+	library(igraph)
 
 <br>
 
