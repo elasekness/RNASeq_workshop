@@ -39,7 +39,7 @@ Filter the table based on adjusted p-value and log2fold change using base R func
 
 	sigDE = res_table[which(res_table$padj <= 0.05 & abs(res_table$log2FoldChange) >=1),]
 	
-We can also filter with functions from the `dplyr` package (part of the `tidyverse` package installation.
+We can also filter with functions from the `dplyr` package (part of the `tidyverse` package installation).
 
 	sigDE <- res_table %>%
   		filter(padj <= 0.05, abs(log2FoldChange) >= 1)
