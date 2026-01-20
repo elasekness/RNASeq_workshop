@@ -3,12 +3,9 @@
 **Objective:** Perform a pathway enrichment analysis using your DESeq2 results.
 
 The next step in our analyses will be to functionally annotate our genes, assign them to higher-level categories, and determine whether any categories have an over-representation of differentially expressed genes.
-[Prokka](https://github.com/tseemann/prokka) and [bakta](https://github.com/oschwengers/bakta) are commonly used to annotate bacterial genomes (note that prokka is no longer maintained).
-Higher-level classification can be achieved with various tools, such as the Gene Ontology (GO) database [https://geneontology.org/](https://geneontology.org/).  
-Genes are hierarchically classified into three main sub-ontologies: Molecular function, Biological process, or Cellular component as well as more specialized related terms.
+[Prokka](https://github.com/tseemann/prokka) and [bakta](https://github.com/oschwengers/bakta) are commonly used to annotate bacterial genomes (note that prokka is no longer maintained). Higher-level classification can be achieved with various tools, such as the Gene Ontology (GO) database [https://geneontology.org/](https://geneontology.org/). Genes are hierarchically classified into three main sub-ontologies: Molecular function, Biological process, or Cellular component as well as more specialized related terms.
 
-[KEGG](https://www.kegg.jp/) is another resource for assigning annotation and predicting higher-level functions.  Genes or proteins are annotated with KO (KEGGG orthology) identifiers or K numbers, which are mapped
-to molecular networks.  KOs are characterized via KEGG Pathway and Brite hierarchies.  KEGG pathways are hierarchically organized into the following main categories:
+[KEGG](https://www.kegg.jp/) is another resource for assigning annotation and predicting higher-level functions.  Genes or proteins are annotated with KO (KEGGG orthology) identifiers or K numbers, which are mapped to molecular networks.  KOs are characterized via KEGG Pathway and Brite hierarchies.  KEGG pathways are hierarchically organized into the following main categories:
 * Metabolism
 * Genetic Information Processing
 * Environmental Information Processing
@@ -98,7 +95,7 @@ Visualize the results as a bubbleplot.
 > Here, the gene ratio (DEGs in pathway/annotated genes in pathway) is represented along the x-axis and the size of the dot corresponds to the number of DE genes in an enriched KEGG category. <br>
 > Again, the color indicates the strength of the adjusted p-value. <br>
 	
-* Are these results consistent with our expectations given the contributing role of pqsE in regulating quorum sensing and biofilm formation? <br>
+* Are these results consistent with our expectations given the role of pqsE in regulating quorum sensing and biofilm formation? <br>
 * The default KEGG IDs are the locus tags for bacteria.  We could convert our locus tags to KOs and see if our enrichment results differ. <br>
 
 We can convert our locus tags into different gene identifiers with the `bitr_kegg()` function. <br>
@@ -173,17 +170,18 @@ Now we can use an `if else` statement to color any vertex names present in our `
 	plot(igraph_object, layout=layout_nicely(igraph_object), vertex.size=V(igraph_object)$degree, vertex.label=NA, vertex.color=V(igraph_object)$color)
 	
 > We populate a `color` attribute for our graph vertices depending on whether the names of the vertices are found in `genes`. <br>
-> The `ifelse` statement has the following syntax: if the vertex names of `igraph_object` are in `genes`, then assign `lightblue`, else assign `gray` <br>
+> The `ifelse` statement has the following syntax: if the vertex names of `igraph_object` are in `genes`, then assign `lightblue`, else assign `gray`. <br>
 
 # Label only vertices that are differentially expressed.
 
-We can use another `ifelse` statement to label only certain nodes on our network graph and minimize clutter
+We can use another `ifelse` statement to label only certain nodes on our network graph and minimize clutter.
 
 	plot(igraph_object, layout=layout_as_tree(igraph_object), vertex.color=V(igraph_object)$color, vertex.label=ifelse(V(igraph_object)$name %in% genes, V(igraph_object)$name, NA))
 
 # Resize vertices based on their log2FoldChanges.
 
-Create a dataframe with the vertex names
+Create a dataframe with the vertex names.
+
 	V_names <- as.data.frame(V(igraph_object)$name)
 	colnames(V_names) <- "name"
 	
@@ -209,7 +207,7 @@ Make a vertex attribute for log2FoldChanges and color the nodes depending on its
 	V(igraph_object)$color = ifelse(V(igraph_object)$lfc > 0, "red", "blue")
 	plot(igraph_object, vertex.color=V(igraph_object)$color, vertex.label=ifelse(V(igraph_object)$name %in% genes, V(igraph_object)$name, NA), vertex.size=V(igraph_object)$size, vertex.label.dist=-1, vertex.label.cex=0.5, vertex.label.degree=pi/2, edge.arrow.size=0.5)
 
-> All nodes are colored regardless of whether they are up or down-regulated, although only nodes with an adjusted p-value < 0.05 are labeled <br>
+> All nodes are colored regardless of whether they are up or down-regulated, although only nodes with an adjusted p-value < 0.05 are labeled. <br>
 
 # Conditionally color vertices blue, red, or gray depending on whether they are significantly under or over-expressed or not differentially expressed.
 
@@ -217,10 +215,10 @@ Make a vector `vertex_colors` with empty entries (the number of entries correspo
 
 	vertex_colors <- character(nrow(vertex_attributes))
 	vertex_colors[vertex_attributes$padj <= 0.05 & vertex_attributes$log2FoldChange <= -1] = "blue"
-	vertex_colors[vertex_attributes$padj <= 0.05 & vertex_attributes$log2FoldChange >= 1] = "red" # there happen to be now genes that fit these criteria
+	vertex_colors[vertex_attributes$padj <= 0.05 & vertex_attributes$log2FoldChange >= 1] = "red" # there happen to be no genes that fit these criteria
 	vertex_colors[vertex_attributes$padj > 0.05 | abs(vertex_attributes$log2FoldChange) < 1] = "gray"
 
-> The first conditional statement searches for entries in the `vertex_attributes` dataframe that have adjusted p-values <= 0.05 *AND* a log2FoldChange <= -1 and assigns the value `blue` to the corresponding row indices of those entries in `vertex_colors` <br>
+> The first conditional statement searches for entries in the `vertex_attributes` dataframe that have adjusted p-values <= 0.05 *AND* a log2FoldChange <= -1 and assigns the value `blue` to the corresponding row indices of those entries in `vertex_colors`. <br>
 > The syntax of second conditional statement mirrors the first but slots the `red` value into `vertex_colors` based on the row indices of entries in `vertex_attributes` that satisfied the specified conditions. <br>
 > The third conditional statement identifies entries in vertex_attributes that have an adusted p-value > 0.05 *OR* (`|`) an absolute fold change < 1 (non-differentially expressed genes). <br>
 
