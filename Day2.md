@@ -57,7 +57,7 @@ The long way:
 
 > TrimGalore will automatically detect the sequencing adapter and trim it from our reads. <br>
 > We also trim reads to a PHRED quality score of 30 (1/1000 chance of being a miscalled base), remove ambiguous bases, and only retain reads with a minimum length of 100 bp. <br>
-> The `--paired` option keeps R1 and R2 reads together, which is necessary for most mapping software. <br>
+> The `--paired` option keeps R1 and R2 reads together, which is necessary for most (all?) mapping software. <br>
 > Other popular read trimming programs include [fastp](https://github.com/OpenGene/fastp) and [Trimmomatic](https://github.com/usadellab/Trimmomatic)
 
 The short way:
@@ -75,7 +75,7 @@ The short way:
 <br>
 
 
-## Quantify transcripts with Salmon
+## Quantify transcripts with [Salmon](https://combine-lab.github.io/salmon/)
 
 [Salmon](https://combine-lab.github.io/salmon/) is a 'wicked fast' program that allows the direct quantification of reads against a transcriptome (no need for an initial read mapping step). 
 We'll use the coding sequences that we downloaded as our transcripts.
@@ -87,6 +87,8 @@ To make typing downstream commands easier, let's move our reference coding seque
 	mkdir salmon_analyses
 	mv fastq/*fq.gz salmon_analyses
 	mv reference_db/pa14_cds.fna salmon_analyses
+
+> Typing `cd` by itself returns you to your home directory.
 
 Index the coding sequence file.
 
@@ -120,6 +122,8 @@ In our case, transcripts and genes are the same so we will create a table with t
 	TXNAME	GENEID
 	PA14_00010	PA14_00010
 	
+> The header names can be anything.
+
 We can generate this table with various methods, including a combination of `grep` and `sed` commands.
 Navigate to the location of your reference coding sequence file, which should now be in the `salmon_analyses` directory.
 
