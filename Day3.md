@@ -10,11 +10,12 @@ If you don't have R on your computer, please install it: [https://www.r-project.
 R is freely available software for statistical analyses and figure generation.
 R packages are bundles of code that perform myriad operations and analyses and can be installed from a CRAN mirror.  
 Bioconductor is essentially a project for developing and maintaining code, written in R, for analysis of biological data.
-We will install [Bioconductor](https://www.bioconductor.org/) as well as four of its packages: 
+We will install [Bioconductor](https://www.bioconductor.org/) as well as five of its packages: 
 [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
 [tximport](https://bioconductor.org/packages/release/bioc/html/tximport.html)
 [clusterProfiler](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html)
 [PCAtools](https://github.com/kevinblighe/PCAtools)
+[KEGGgraph](https://github.com/Accio/KEGGgraph)
 
 Open an R window on your computer and install Bioconductor, DESeq2, tximport, and clusterProfiler.
 
@@ -23,10 +24,12 @@ Open an R window on your computer and install Bioconductor, DESeq2, tximport, an
 	BiocManager::install("tximport")
 	BiocManager::install("clusterProfiler")
 	BiocManager::install('PCAtools')
+	BiocManager::install("KEGGgraph")
 	
 Please also install these other useful packages:
 
-	install.packages("ggplot2")
+	install.packages("ggplot2") # or install tidyverse, which includes ggplot and other useful packages
+	install.packages("tidyverse")
 	install.packages("pheatmap")
 	install.packages("igraph")
 
@@ -35,10 +38,12 @@ Now load the packages in your R session
 	library(DEseq2)
 	library(tximport)
 	library(clusterProfiler)
-	library(ggplot2)
+	#library(ggplot2)
+	install.packages(tidyverse)
 	library(pheatmap)
 	library(PCAtools)
 	library(igraph)
+	library(KEGGgraph)
 
 <br>
 
