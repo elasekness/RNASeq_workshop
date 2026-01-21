@@ -133,7 +133,7 @@ Navigate to the location of your reference coding sequence file, which should no
 > The tilde `~` in the `cd` command is a shorthand way of specifying your home directory. <br>
 > The `grep` command grabs all the definition lines from our reference transcript file. <br>
 > The first `sed` command removes the `>` symbol, as it is not part of our transcript name. <br>
-> The second `sed` command searches for any number of characters any number of times with `.*`. This represents each locus tag, which are saved via the special parenthetical notation. <br>
+> The second `sed` command searches for any number of characters any number of times with `.*`. This represents all locus tags, which are saved via the special parenthetical notation. <br>
 > We recall the locus tag twice in our replacement command with `\1` and separate the transcript name from the gene name with a tab `\t`. <br>
 > You can manually add the headers `TXNAME` and `GENEID` in `nano` and save the output. <br>
 
