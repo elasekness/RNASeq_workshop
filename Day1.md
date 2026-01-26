@@ -93,11 +93,13 @@ Let's make `reference_db` and `fastq` subdirectories of `rnaseq_workshop`.
 
 Change (move) to a different directory.
 
-	cd fastq
+	cd rnaseq_workshop/fastq
 
-> **`cd`** = change directory. Use **`../`** or **`..`** to move up one directory (back to your home directory). What does **`cd`** alone do? <br>
+> **`cd`** = change directory.
+> Because we are in our home directories and fastq is in `home_directory/rnaseq_workshop` we need to specify the path to get there.
 > You can think of changing directories as physically moving from one directory to another, which means your point of reference has changed. This will become more evident in the upcoming examples. <br>
-> For now, try listing the contents of the directory above yours from your home directory. Then **`cd`** to the directory above yours and list the contents of your home directory.
+> Use **`../`** or **`..`** to move up one directory or **`../../`** to move up two directories (back to your home directory).
+> What does **`cd`** alone do? <br>
 
 <br>
 
@@ -105,7 +107,7 @@ Now try copying files from one directory to another.  Here we will copy the fast
 We will copy R1 and R2 paired-end read files from two conditions (a control and an experimental treatment), each having two replicates, from `/home/rnaseq_workshop/fastq` to your `fastq` directory. 
 To copy them, we can specify an absolute path, which is the location
 of these files with respect to the root directory (i.e. going through the entire filesystem to get to your file) or a relative path, which is
-where these files are located with respect to your current working directory (i.e. where you are when you enter `pwd`).
+where these files are located with respect to your current working directory (i.e. where you are when you enter `pwd`). If it's not, make sure `fastq` is your current working dirctory.
 
 <br>
 
@@ -122,9 +124,9 @@ Let's try using absolute and relative paths.
 
 Now use a relative path to copy the fastq file to where you are. This will simply overwrite the exisiting file.
 
-	cp ../../../rnaseq_workshop/fastq/wt-1_R1.fastq.gz .
+	cp ../../../../rnaseq_workshop/fastq/wt-1_R1.fastq.gz .
 
-> Notice that we had to move up three directories to get to `rnaseq_workshop`. <br>
+> Notice that we had to move up four directories to get to `rnaseq_workshop`. <br>
 > Also notice that we must always specify an end location for our copied files, which is our current location: `.`. 
 > If we specified `new-fastq_R1.fastq.gz` instead of `.`, the contents of `wt-1_R1.fastq.gz` would be written to this new file in our current location.
 
@@ -135,7 +137,7 @@ You could continue to copy each file individually, or we could copy all our fast
 	cp /home/rnaseq_workshop/fastq/*gz .
 
 > The **star/asterisk** has special meaning.  It represents any character any number of times
-> Given the syntax above, I am copying any file with a gz ending from the fastq subdirectory to my current directory.
+> Given the syntax above, I am copying any file with a `gz` ending from the fastq subdirectory to my current directory.
 > Other metacharacters are described at the end of this tutorial.
 
 <br>
