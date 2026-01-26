@@ -96,9 +96,9 @@ Change (move) to a different directory.
 	cd rnaseq_workshop/fastq
 
 > **`cd`** = change directory.
-> Because we are in our home directories and fastq is in `home_directory/rnaseq_workshop` we need to specify the path to get there.
+> Because we are in our home directories and fastq is in a subdirectory of our home directory, we need to specify the path to get there. <br>
 > You can think of changing directories as physically moving from one directory to another, which means your point of reference has changed. This will become more evident in the upcoming examples. <br>
-> Use **`../`** or **`..`** to move up one directory or **`../../`** to move up two directories (back to your home directory).
+> Use **`../`** or **`..`** to move up one directory or **`../../`** to move up two directories (back to your home directory). <br>
 > What does **`cd`** alone do? <br>
 
 <br>
@@ -169,7 +169,7 @@ Change directories with the `cd rna_workshop` command (if you are not already in
 
 Change the permissions associated with your `fastq` directory with the 'chmod' command (change mode).
 
-	chmod 775 genomes
+	chmod 775 fastq
 
 > Permissions are represented by three-digit (for user, group, and other) octal numbers.
 > Here we are allowing the user and group universal permissions (7 = read, write, and execute) and all others
@@ -185,7 +185,7 @@ There are many ways to make and view files in a Linux OS (operating system).
 We can redirect output from a command that prints its output to your screen (STDOUT) to a file instead,
 we can generate files on the fly by opening them in a text editor, or we can copy an existing file.
 Similarly, we can view and edit files in a text editor or we can print their contents to the screen with various command-line options.
-As a general rule, it's always good to examine some of the contents of your file to ensure you've generated the results you want in the
+As a general rule, it's always good to examine some of the content of your file to ensure you've generated the results you want in the
 format you want or that you are using the correct file and format for downstream applications.
 
 <br>
@@ -194,7 +194,7 @@ Redirect STDOUT to a file.
 
 	ls /usr/bin > programs.txt
 
-> The path **`/usr/bin`** specifies the location where various Bash commands are found. When you type a command, **`/usr/bin`** is one of the locations your computer searches to find and execute the command. <br>
+> The path **`/usr/bin`** specifies the location where various SHELL commands are found. When you type a command, **`/usr/bin`** is one of the locations your computer searches to find and execute the command. <br>
 > Was **`/usr/bin`** part of your **`$PATH`**? <br>
 > Here we are redirecting the STDOUT from the **`ls`** command to a file named **`programs.txt`**. The **`>`** sign is responsible for the redirection.
 
@@ -302,7 +302,7 @@ Return to your VM terminal, navigate to your `reference_db` directory, and type:
 	efetch --help
 
 > This brings up a long menu of options for the efetch tool, which can be used to download a variety of data in different formats from NCBI. <br>
-> esearch and efetch are part of Entrez Direct suite of utilities ([https://www.ncbi.nlm.nih.gov/books/NBK179288/](https://www.ncbi.nlm.nih.gov/books/NBK179288/)) that allow you to search NCBI databases from your terminal window.
+> **`esearch`** and **`efetch`** are part of Entrez Direct suite of utilities ([https://www.ncbi.nlm.nih.gov/books/NBK179288/](https://www.ncbi.nlm.nih.gov/books/NBK179288/)) that allow you to search NCBI databases from your terminal window.
 > Relevant arguments are typically the database `-db` we want to search, the format `-format` of the data, and the `-id` of our query, which is the accession of a sequence of interest.
 
 <br>
