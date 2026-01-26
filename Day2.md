@@ -47,6 +47,8 @@ Or you can run stats on both files at the same time
 
 	seqkit stats wt-1*gz -T | csvtk pretty -t
 
+<br>
+
 ## Clean your reads with [TrimGalore](https://github.com/FelixKrueger/TrimGalore).
 
 You can process your PE fastqs one-by-one or you could execute a BASH for-loop to do the job for you.
@@ -113,6 +115,8 @@ All of our sf files are currently named `quant.sf`. Let's use a for-loop to rena
 
 	for filn in `cat seqlist`; do mv $filn"/quant.sf" $filn".sf"; done
 
+	<br>
+
 ## Generate a table that associates transcripts with genes.
 
 If we had true transcript data we would need to collapse our transcript-level abundances to gene-level abundances.
@@ -135,13 +139,23 @@ Navigate to the location of your reference coding sequence file, which should no
 > The first **`sed`** command removes the **`>`** symbol, as it is not part of our transcript name. <br>
 > The second **`sed`** command searches for any number of characters any number of times with **`.*`**. This represents all locus tags, which are saved via the special parenthetical notation. <br>
 > We recall the locus tag twice in our replacement command with **`\1`** and separate the transcript name from the gene name with a tab - **`\t`**. <br>
-> You can manually add the headers `TXNAME` and `GENEID` in **`nano`** and save the output. <br>
+> You can manually add the headers `TXNAME` and `GENEID` in **`nano`** and save the output.
+
+<br>
 
 ## Transfer data from VM to poject's storage bucket.
 
 The `sf` files and the `tx2gene.txt` file are necessary for our DEG analyses.  While our files are currently located on the training VMs, we will perform our DEG analyses in **`R`** on our personal computers. We need to transfer our data files from the VMs to the project's associated storage bucket.  We can then download the files directly to our computers via the storage bucket.  We will make use of GCP's [gsutil](https://docs.cloud.google.com/storage/docs/gsutil) commands (note that **`gsutil`** is a legacy package and Google now recommends using **`gcloud storage`** commands).
 
 **`gsutil`** is Python application that allows you to interact with cloud storage (the bucket) from the command line. Functions include, copying files between bucket and VM, and deleting, moving, and listing files in storage.
+
+Before we can copy anything to the bucket, we need to authenticate our accounts using a function from the **`gcloud`** application.
+
+	gcloud auth login
+
+> Now follow the instructions provided.
+
+
 
 The `gs://` prefix must be added to the path in your bucket to indicate a resoure in Cloud Storage.
 
