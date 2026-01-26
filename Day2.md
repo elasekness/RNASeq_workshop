@@ -115,7 +115,7 @@ All of our sf files are currently named `quant.sf`. Let's use a for-loop to rena
 
 	for filn in `cat seqlist`; do mv $filn"/quant.sf" $filn".sf"; done
 
-	<br>
+<br>
 
 ## Generate a table that associates transcripts with genes.
 
@@ -170,8 +170,8 @@ Return to your terminal window and navigate to the location of your `sf` and `tx
 	gsutil cp *sf gs://wc-bms-bi-training-bucket/rnaseq_workshop0126/your_initials
 	gsutil cp tx2gene.txt gs://wc-bms-bi-training-bucket/rnaseq_workshop0126/your_initials
 
-> Notice that the **`gsutil cp`** command is similar in structure to a BASH **`cp`** command.
-> Also notice that we can use metacharacters to specify multiple files.
+> Notice that the **`gsutil cp`** command is similar in structure to a BASH **`cp`** command. <br>
+> Also notice that we can use metacharacters to specify multiple files. <br>
 > The `gs://` prefix must be added to the path in your bucket to indicate a resoure in Cloud Storage.
 
 <br>
