@@ -1,0 +1,5 @@
+	Condition
+wt1	wt
+wt2	wt
+pqse1	pqse
+pqse2	pqse
