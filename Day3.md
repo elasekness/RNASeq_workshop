@@ -2,6 +2,7 @@
 
 **Objective:** Perform a differential expression analysis with DESeq2 in R.
 
+<br>
 
 ## Download and install R on your computer 
 
@@ -105,6 +106,8 @@ Our DESeqDataSet object has specific slots for the different data we provide, in
 	head(counts(dds))
 	design(dds)
 
+<br>
+
 ## Normalize the read counts.
 
 DESeq2 normalizes read counts with the median of ratios method, which accounts for variable sequencing depth and RNA composition. Briefly, the geometric mean for each gene is calculated across all samples and used to generate a (gene read count)/(geometric mean) ratio for each gene in each sample.
@@ -115,18 +118,23 @@ We need only one function to calculate the size factors and perform the normaliz
 
 	dds <- estimateSizeFactors(dds)
 
-> Normalized read counts are now saved back to the `dds` object. <br>
+> Normalized read counts are now saved back to the `dds` object.
+
+<br>
 
 We can retrieve the size factors with the following command:
 
 	sizeFactors(dds)
 	
+
 We can also retrieve the normalized read counts and save them to a table.
 
 	head(counts(dds, normalized=T))
 	write.table(counts(dds, normalize=T), file="normalized_readcounts.txt", sep='\t', quote=F, col.names=NA)
 	
-> **Note** `DESeq2` uses the raw read count data for DE analysis and models the normalization inside the Generalized Linear Model (GLM) so we don't have to perform the above steps at all. <br>
+> **Note** `DESeq2` uses the raw read count data for DE analysis and models the normalization inside the Generalized Linear Model (GLM) so we don't have to perform the above steps at all.
+
+<br>
 
 ## Visually evaluate the quality of your data.
 
@@ -146,12 +154,16 @@ for genes that contribute most to the variation in PC1 and/or PC2.
 * Based on your PCA plot, do you think we have good replicates?
 * How do you think this will influence the number of differentially expressed genes we are able to detect?
 
+<br>
+
 You could also plot the normalized read counts of replicates against each other in base R.
 Ideally, all points would be close to or on the 45 degree line, indicating a 1:1 ratio of expression between replicates.
 
 	normalized_counts = counts(dds, normalize=T)
 	plot(normalized_counts$wt1, normalized_counts$wt2)
-	
+
+<br>
+
 Or we can make a heatmap showing the correlation of expression values across samples.
 
 	rld_matrix <- assay(rld)
@@ -169,17 +181,21 @@ The [PCAtools](https://github.com/kevinblighe/PCAtools) package has additional f
 	biplot(p, showLoadings = TRUE, labSize = 5, pointSize = 5, sizeLoadingsNames = 5, colby="Condition")
 
 > As before, we extract the matrix of log-transformed expression values.  <br>
-> We then perform our PCA analysis and plot the results, coloring by the treatments in our `Condition` column of our `ColData` dataframe/table.
+> We then perform our PCA analysis and plot the results, coloring by the treatments in our `Condition` column of our `ColData` dataframe/table. <br>
 > Now, we show the variation among samples as well as the impact of the most influential genes on the first two principle components with the **`showLoadings=TRUE`** option. <br>
 > Genes grouped together are positively correlated with each other while negatively correlated genes are displayed to the opposites sides of the plot's origin. <br>
 > The distance between the variable and the origin is positively correlated with its magnitude or representation in the data. <br>
-> This helps use to see which genes are contributing most to the variation. <br>
+> This helps use to see which genes are contributing most to the variation.
+
+<br>
 
 A `screeplot` shows us the importance of each principle component in explaining the variation within our data.
 
 	screeplot(p)
 
 > We can see that the first two components are responsible for explaining most of our data.
+
+<br>
 
 ## Perform the differential expression analysis.
 
@@ -189,14 +205,18 @@ This requires a single function that is really performing multiple steps, includ
 	
 > DESeq2 uses a negative binomial distribution to model the read count data, which accounts for the fact that variance > mean (overdispersion).
 
+<br>
+
 DESeq2 uses the Wald test to determine whether the expression changes observed across treatments are statistically significant (the null hypothesis being that there is no change in expression between two conditions as measured by the log-fold change).
 
 	res = results(dds, contrast=c("Condition", "pqse", "wt"))
 	write.table(res, file="pqsE-vs-wt-results.txt", sep='\t', quote=F, col.names=NA)
 	
-> The **`results()`** function performs the hypothesis testing for us, comparing `pqse` to `wt`.
-> **Note** the order of the sample names in the contrast is important. 
+> The **`results()`** function performs the hypothesis testing for us, comparing `pqse` to `wt`. <br>
+> **Note** the order of the sample names in the contrast is important. <br>
 > The `res` object can be saved as a table for further inspection.
+
+<br>
 
 The output includes:
 * **`baseMean`** mean of normalized counts for all samples
