@@ -19,6 +19,7 @@ We will install [Bioconductor](https://www.bioconductor.org/) as well as five of
 [KEGGgraph](https://github.com/Accio/KEGGgraph)
 
 <br>
+
 Open an R window on your computer and install Bioconductor, DESeq2, tximport, and clusterProfiler.
 
 	install.packages("BiocManager")
