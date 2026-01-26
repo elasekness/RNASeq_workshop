@@ -142,7 +142,8 @@ You could continue to copy each file individually, or we could copy all our fast
 
 <br>
 
-You can also copy the entire rnaseq_workshop directory and all of its contents to your home directory. Don't do this.
+You can also copy the entire rnaseq_workshop directory and all of its contents to your home directory. 
+**Don't do this.**
 
 	cp -r /home/rnaseq_workshop/ .
 	
@@ -267,7 +268,7 @@ Remove a file. Let's remove files we don't need.
 * Everything in Linux is case sensitive.
 * Avoid creating file names/directories with spaces. Use underscores, dashes, or periods instead to separate multi-part names.
 * Spaces need to be escaped (more on that later).  For example, if you tried to make a directory called “my directory”, you would get two directories, `my` and `directory`.
-* Can’t find a command? Try `which` to see if the command is in your path – whether the command is in a location that the computer searches for executing commands.
+* Can’t find a command? Try **`which`** to see if the command is in your path – whether the command is in a location that the computer searches for executing commands.
 
 <br>
 
@@ -282,16 +283,16 @@ Navigate to NCBI’s homepage: [https://www.ncbi.nlm.nih.gov/](https://www.ncbi.
 
 
 > Notice that there are options to submit sequences, download sequences, and even analyze data. <br>
-> There is also an option to submit sequences to the BLAST server.
-> BLAST is an alignment tool to look for sequences that are similar (a proxy for homology) to your queries.
+> There is also an option to submit sequences to the BLAST server. <br>
+> BLAST is an alignment tool to look for sequences that are similar (a proxy for homology) to your queries. <br>
 
 
-Choose 'Assembly' under the top left pull-down menu (set to 'All Databases' by default). We can use BOOLEAN search terms (such as AND, OR, and NOT) to make our search more specific.
-For now, simply type "pseudomonas aeruginosa UCBPP-PA14"  How many entries are returned?
-If we didn't know the genome or assembly accession, we could use the filter drop-down menu to narrow our search. From the "filters" menu, specify that you want genomes with annotation and those 
+Choose `Assembly` under the top left pull-down menu (set to `All Databases` by default). We can use BOOLEAN search terms (such as AND, OR, and NOT) to make our search more specific.
+For now, simply type `pseudomonas aeruginosa UCBPP-PA14`  How many entries are returned?
+If we didn't know the genome or assembly accession, we could use the filter drop-down menu to narrow our search. From the `filters` menu, specify that you want genomes with annotation and those 
 that are completely assembled.  This now returns one assembly. Clicking the assembly link associated with this strain brings you to a page with additional information, including various ways to download the genome and associated data.  Notice that there are GenBank and RefSeq versions of this assembly even though it is the same genome.
 
-We can download the genome in fasta file format to our computers using the 'download' option at the top left of the page.
+We can download the genome in fasta file format to our computers using the `download` option at the top left of the page.
 However, we would then need to transfer this file from our computers to a GCP storage bucket and from the storage bucket to our VM. 
 An easier method to obtain these sequences would be to use one of NCBI's tools for interacting with their databases.
 
@@ -302,17 +303,17 @@ Return to your VM terminal, navigate to your `reference_db` directory, and type:
 	efetch --help
 
 > This brings up a long menu of options for the efetch tool, which can be used to download a variety of data in different formats from NCBI. <br>
-> **`esearch`** and **`efetch`** are part of Entrez Direct suite of utilities ([https://www.ncbi.nlm.nih.gov/books/NBK179288/](https://www.ncbi.nlm.nih.gov/books/NBK179288/)) that allow you to search NCBI databases from your terminal window.
-> Relevant arguments are typically the database `-db` we want to search, the format `-format` of the data, and the `-id` of our query, which is the accession of a sequence of interest.
+> **`esearch`** and **`efetch`** are part of Entrez Direct suite of [Eutilities]([https://www.ncbi.nlm.nih.gov/books/NBK179288/] that allow you to search NCBI databases from your terminal window. <br>
+> Relevant arguments are typically the database **`-db`** we want to search, the format **`-format`** of the data, and the **`-id`** of our query, which is the accession of a sequence of interest.
 
 <br>
 
-We can use the genome accession associated with the assembly to download the Pa14 genome.  You can obtain this accession by going back to the assembly page for Pa14 and clicking the link "view GenBank sequences." This takes you to the genome page where the accession listed is as "CP000438." 
+We can use the genome accession associated with the assembly to download the Pa14 genome.  You can obtain this accession by going back to the assembly page for Pa14 and clicking the link "view GenBank sequences." This takes you to the genome page where the accession listed is as `CP000438`. 
 
 	efetch -db nuccore -id CP000438 -format fasta > pa14.fasta
 	
 > This fetches the nucleotide sequence for the Pa14 genome from the core nucleotide database in fasta format.
-> Remember that STDOUT is output from a command that gets printed to your screen while the `>` symbol redirects this output to a file (pa14.fasta).
+> Remember that STDOUT is output from a command that gets printed to your screen while the **`>`** symbol redirects this output to a file (`pa14.fasta`).
 
 <br>
 
@@ -320,19 +321,19 @@ We need to specify a different output format to download the coding sequences as
 
 	efetch -db nuccore -id CP000438 -format fasta_cds_na > pa14_cds.fasta
 	
-> If we didn't have a genome/nucleotide accession, we could query the nucleotide core database with the `esearch` command first and pass that information to `efetch` using a pipe.
+> If we didn't have a genome/nucleotide accession, we could query the nucleotide core database with the **`esearch`** command first and pass that information to **`efetch`** using a pipe.
 
 <br>
 
-An easier and more efficient method to download a genome and its coding sequences is to use the **`datasets`** command-line tool. A help menu will appear if you type **`datasets`** without any arguments.  
+An easier and more efficient method to download a genome and its coding sequences is to use NCBI's [Datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/v2/getting_started/) command-line tool. A help menu will appear if you type **`datasets`** without any arguments.  
 Typing **`datasets download`** will give you additional information regarding the download function. Note the option to download a genome by its assembly accession or taxonomy.  
 
 
 	datasets download genome accession GCA_000014625.1 --include genome,cds
 	
 > This command will download the GenBank version of the Pa14 assembly as well as the coding sequences in fasta format.
-> Data are saved to a zipped folder entitled "ncbi_dataset" by default.  To inflate its contents, simply type `unzip ncbi_dataset`.
-> If you `ls` the directory structure, you'll see that your files are here: `ncbi_dataset/data/GCA_000014625.1/`.
+> Data are saved to a zipped folder entitled `ncbi_dataset` by default.  To inflate its contents, simply type **`unzip ncbi_dataset`**.
+> If you **`ls`** the directory structure, you'll see that your files are here: `ncbi_dataset/data/GCA_000014625.1/`.
 
 <br>
 
@@ -341,7 +342,7 @@ Move the genome and coding sequence files to `reference_db`.
 	mv ncbi_dataset/data/GCA_000014625.1/*fna .
 	
 > This command assumes you are in your `reference_db` directory.
-> The genome and coding sequence fasta files end with '.fna', making it easy to move both.
+> The genome and coding sequence fasta files end with `.fna`, making it easy to move both.
 
 As you can see, there are usually multiple ways to solve a problem in bioinformatics.
 
@@ -358,7 +359,7 @@ Piping is specified by **`|`** and simply pipes the STDOUT from one command to a
 <br>
 
 
-Count how many sequences are in the 'cds_from_genomic.fna' file.
+Count how many sequences are in the `cds_from_genomic.fna` file.
 
 	grep -c ">" cds_from_genomic.fna
 
@@ -381,7 +382,7 @@ Grab the first 5 header lines from your fasta file with `grep` and a pipe.
 
 <br>
 
-Count the number of sequences in the fasta file using a pipe to `wc` instead.
+Count the number of sequences in the fasta file using a pipe to **`wc`** instead.
 
 	grep ">" cds_from_genomic.fna | wc -l
 
@@ -390,36 +391,36 @@ Count the number of sequences in the fasta file using a pipe to `wc` instead.
 <br>
 
 You'll notice that the definition lines or sequence names are quite long and include the chromosome accession, the coding sequence accession, the locus tag, the protein description, and more.
-For our purposes, we want to define our genes by the locus_tag.  Without the use of regular expressions and the `sed` command, modifying this file would be incredibly difficult and tedious.
+For our purposes, we want to define our genes by the locus_tag.  Without the use of regular expressions and the **`sed`** command, modifying this file would be incredibly difficult and tedious.
 Use **`sed`** to rename the definition lines of your fasta file so that only the locus tags remain. But first, **`grep`** the definition lines so that you can view your changes more easily.
 
 
 	grep ">" cds_from_genomic.fna | sed "s/>.*locus_tag=\(PA14_.....\)\].*/>\1/"
 
 > **`sed`** = stream editor.  **`sed`** is essentially a search and replace function. <br>
-> Like **`grep`**, we can search for complicated patterns when we use this command with regular expressions. Unlike `grep`, we can replace these complicated patterns with another. <br>
+> Like **`grep`**, we can search for complicated patterns when we use this command with regular expressions. Unlike **`grep`**, we can replace these complicated patterns with another. <br>
 > The syntax for the search and replace command is **`'s/search pattern/replacement pattern/'`** where the 's' stands for substitute. <br>
 > Although the definition lines are unique, the formatting is consistent, allowing us to search for a general pattern and replace it with a new one. <br>
-> In other words, we can use a regular expression to replace all of the patterns displayed in the sequence names without having to search for each pattern individually by employing our special metacharacters. <br>
+> In other words, we can use a regular expression to replace all of the patterns displayed in the sequence names, without having to search for each pattern individually, by employing our special metacharacters. <br>
 > Like **`grep`**, **`sed`** will search for your pattern line by line. It will make a replacement once (unless you specify otherwise, see the manual page). <br>
-> Here we start our search by specifying that we are looking for lines with a ">" followed by any character `.` any number of times `*`.  This is followed by the 'locus_tag=' expression. <br>
-> To search for a literal period or star, we would have to exit out of or escape the metacharacter with a backslash: `\.` and `\*`.
-> The `\` in front of the parentheses give the parentheses a special meaning.  It is a way of grouping information and saving it for recall later. <br>
-> With our special parenthetical notation, we are saving the locus tag information, which we notate as `PA14_.....`, where the periods represent any character once for the five digits associated with the tag. <br>  
-> We could also specify the digits of the locus tag like this: `[0-9]*` where brackets specify a range of numbers or characters and the asterisk specifies any number of times. <br>
-> The final part of the expression: `\].*` encompasses all information after the locus tag in the definition line. Anything not saved in the parentheses will be replaced by our replacement expression <br>
-> The replacement expression adds the ">" back to the definition line and recalls the information grouped in the parenthesis with `\1`, where the backslash essentially makes the 1 a special character recalling the stored information.<br>
+> Here we start our search by specifying that we are looking for lines with a `>` followed by any character `.` any number of times `*`.  This is followed by the `locus_tag=` expression. <br>
+> To search for a literal period or star, we would have to exit out of or escape the metacharacter with a backslash: **`\.`** and **`\*`**.
+> The **`\`** in front of the parentheses give the parentheses a special meaning.  It is a way of grouping information and saving it for recall later. <br>
+> With our special parenthetical notation, we are saving the locus tag information, which we notate as **`PA14_.....`**, where the periods represent any character once for the five digits associated with the tag. <br>  
+> We could also specify the digits of the locus tag like this: **`[0-9]*`** where brackets specify a range of numbers or characters and the asterisk specifies any number of times. <br>
+> The final part of the expression: `\].*` encompasses all information after the locus tag in the definition line. Anything not saved in the parentheses will be replaced by our replacement expression. <br>
+> The replacement expression adds the **`>`** back to the definition line and recalls the information grouped in the parenthesis with **`\1`**, where the backslash essentially makes the 1 a special character recalling the stored information.<br>
 
-If we didn't `grep` the definitions lines first,  `sed` would print your entire document to STDOUT, making it hard to find the changes, which are only in the definition lines.
+If we didn't **`grep`** the definitions lines first,  **`sed`** would print your entire document to STDOUT, making it hard to find the changes, which are only in the definition lines.
 
 * How would we check that changes have been made to all of our definition lines and that we aren't missing any anomalies?
 
-Once you know your `sed` command has worked to reformat all definition lines, you can actually implement the change.
+Once you know your **`sed`** command has worked to reformat all definition lines, you can actually implement the change.
 
 	sed "s/>.*locus_tag=\(PA14_.....\)\].*/>\1/" cds_from_genomic.fna > pa14_cds.fna
 	
-> We've written the modified content to a new file but you can overwrite the content of the original file in place:
-> `sed "s/>.*locus_tag=\(PA14_.....\)\].*/>\1/" cds_from_genomic.fna > pa14_cds.fna` <br>
+> We've written the modified content to a new file but you can overwrite the content of the original file in place: <br>
+> **`sed -i "s/>.*locus_tag=\(PA14_.....\)\].*/>\1/" cds_from_genomic.fna > pa14_cds.fna`** <br>
 > However, writing in place should only be performed if you are sure the modified content is correct.
 
 <br>
@@ -434,7 +435,7 @@ Let's try some more complicated parsing of our data using various Bash commands 
 ## Bash for loops
 
 
-Bash for loops are basically little shell scripts that can be excecuted from the command line (Bash is the command-line language we are using). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
+Bash for loops are basically little shell scripts that can be excecuted from the command line (BASH is the command-line language we are using). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
 
 <br>
 
@@ -445,7 +446,7 @@ The basic syntax is:
 > The interpretation of this code is: <br>
 > For every file that ends in some common ending (such as .txt or .gz), perform (do) some command on that file until there are no more files on which to operate, whereby “done” will exit us from the loop. <br>
 > The $ in front of FILE indicates that $FILE is a variable, a placeholder which is referring to each file that enters the loop, just as x is a variable that represents 2 in the equation x = 2. <br>
-> The `for`, `in`, `do`, and `done` are required parts of the for-loop syntax.
+> The **`for`**, **`in`**, **`do`**, and **`done`** are required parts of the for-loop syntax.
 
 <br>
 
