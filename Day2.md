@@ -16,7 +16,7 @@ Our questions are:
 * What genes are significantly up or down-regulated by the deletion of the pqsE gene?
 * What pathways are significantly enriched for differentially expressed genes?
 
-Our read data are in 150x150 bp paired-end format (each replicate as an R1 and R2 read file) and were sequenced on an Illumina NextSeq machine.
+Our read data are in 50x50 bp paired-end format (each replicate as an R1 and R2 read file) and were sequenced on an Illumina NextSeq machine.
 We have RNASeq results from two biological replicates of a pqsE deletion strain and two biological replicates of the wild type strain.
 
 The number of replicates included is an important consideration of your experimental design - increasing the number of replicates increases the power to detect significant changes.  
@@ -54,17 +54,17 @@ You can process your PE fastqs one-by-one or you could execute a BASH for-loop t
 
 The long way:
 
-	trim_galore -q 30 --length 100 --trim-n --paired wt-1_R1.fastq.gz wt-1_R2.fastq.gz
+	trim_galore -q 30 --length 30 --trim-n --paired wt-1_R1.fastq.gz wt-1_R2.fastq.gz
 
 > TrimGalore will automatically detect the sequencing adapter and trim it from our reads. <br>
-> We also trim reads to a PHRED quality score of 30 (1/1000 chance of being a miscalled base), remove ambiguous bases, and only retain reads with a minimum length of 100 bp. <br>
+> We also trim reads to a PHRED quality score of 30 (1/1000 chance of being a miscalled base), remove ambiguous bases, and only retain reads with a minimum length of 30 bp. <br>
 > The **`--paired`** option keeps R1 and R2 reads together, which is necessary for most (all?) mapping software. <br>
 > Other popular read trimming programs include [fastp](https://github.com/OpenGene/fastp) and [Trimmomatic](https://github.com/usadellab/Trimmomatic) <br>
 
 The short way:
 
 	ls *R1.fastq.gz | cut -d "_" -f 1 > seqlist
-	for filn in `cat seqlist`; do trim_galore -q 30 --length 100 --trim-n --paired $filn"_R1.fastq.gz" $filn"_R2.fastq.gz"; done
+	for filn in `cat seqlist`; do trim_galore -q 30 --length 30 --trim-n --paired $filn"_R1.fastq.gz" $filn"_R2.fastq.gz"; done
 
 > We list all R1 fastq files and cut them on the underscore delimiter to take the first field, which is the base name for each PE fastq file (For example, `wt-1`). <br>
 > We save that output to a file called `seqlist`.  You can **`cat`** the seqlist file to see the results. <br>
