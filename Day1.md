@@ -116,8 +116,8 @@ Let's try using absolute and relative paths.
 	cp /home/rnaseq_workshop/fastq/wt-1_R1.fastq.gz .
 
 > **`cp`** = copy. <br>
-> Here we used the absolute path to copy the fastq file `wt-1_R1.fastq.gz` to `.`, which represents our current location.
-> Since we cd'ed into `fastq` in our previous command, this should be our current location.
+> Here we used the absolute path to copy the fastq file `wt-1_R1.fastq.gz` to `.`, which represents our current location. <br>
+> Since we cd'ed into `fastq` in our previous command, this should be our current location. <br>
 > It's always good to check that your commands worked. `ls` your current directory to see that the fastq file copied.
 
 <br>
@@ -136,8 +136,8 @@ You could continue to copy each file individually, or we could copy all our fast
 
 	cp /home/rnaseq_workshop/fastq/*gz .
 
-> The **star/asterisk** has special meaning.  It represents any character any number of times
-> Given the syntax above, I am copying any file with a `gz` ending from the fastq subdirectory to my current directory.
+> The **star/asterisk** has special meaning.  It represents any character any number of times. <br>
+> Given the syntax above, I am copying any file with a `gz` ending from the fastq subdirectory to my current directory. <br>
 > Other metacharacters are described at the end of this tutorial.
 
 <br>
@@ -148,6 +148,8 @@ You can also copy the entire rnaseq_workshop directory and all of its contents t
 	cp -r /home/rnaseq_workshop/ .
 	
 > Notice that we need the `-r` recursive argument to specify that we are copying a directory and all the content within that directory, including subdirectories.
+
+<br>
 
 ## Permissions
 
@@ -293,7 +295,9 @@ If we didn't know the genome or assembly accession, we could use the filter drop
 that are completely assembled.  This now returns one assembly. Clicking the assembly link associated with this strain brings you to a page with additional information, including various ways to download the genome and associated data.  Notice that there are GenBank and RefSeq versions of this assembly even though it is the same genome.
 
 We can download the genome in fasta file format to our computers using the `download` option at the top left of the page.
+
 However, we would then need to transfer this file from our computers to a GCP storage bucket and from the storage bucket to our VM. 
+
 An easier method to obtain these sequences would be to use one of NCBI's tools for interacting with their databases.
 
 <br>
@@ -312,7 +316,7 @@ We can use the genome accession associated with the assembly to download the Pa1
 
 	efetch -db nuccore -id CP000438 -format fasta > pa14.fasta
 	
-> This fetches the nucleotide sequence for the Pa14 genome from the core nucleotide database in fasta format.
+> This fetches the nucleotide sequence for the Pa14 genome from the core nucleotide database in fasta format. <br>
 > Remember that STDOUT is output from a command that gets printed to your screen while the **`>`** symbol redirects this output to a file (`pa14.fasta`).
 
 <br>
@@ -325,14 +329,17 @@ We need to specify a different output format to download the coding sequences as
 
 <br>
 
-An easier and more efficient method to download a genome and its coding sequences is to use NCBI's [Datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/v2/getting_started/) command-line tool. A help menu will appear if you type **`datasets`** without any arguments.  
+An easier and more efficient method to download a genome and its coding sequences is to use NCBI's [Datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/v2/getting_started/) command-line tool. 
+
+A help menu will appear if you type **`datasets`** without any arguments.  
+
 Typing **`datasets download`** will give you additional information regarding the download function. Note the option to download a genome by its assembly accession or taxonomy.  
 
 
 	datasets download genome accession GCA_000014625.1 --include genome,cds
 	
-> This command will download the GenBank version of the Pa14 assembly as well as the coding sequences in fasta format.
-> Data are saved to a zipped folder entitled `ncbi_dataset` by default.  To inflate its contents, simply type **`unzip ncbi_dataset`**.
+> This command will download the GenBank version of the Pa14 assembly as well as the coding sequences in fasta format. <br>
+> Data are saved to a zipped folder entitled `ncbi_dataset` by default.  To inflate its contents, type **`unzip ncbi_dataset`**. <br>
 > If you **`ls`** the directory structure, you'll see that your files are here: `ncbi_dataset/data/GCA_000014625.1/`.
 
 <br>
@@ -341,8 +348,8 @@ Move the genome and coding sequence files to `reference_db`.
 
 	mv ncbi_dataset/data/GCA_000014625.1/*fna .
 	
-> This command assumes you are in your `reference_db` directory.
-> The genome and coding sequence fasta files end with `.fna`, making it easy to move both.
+> This command assumes you are in your `reference_db` directory. <br>
+> The genome and coding sequence fasta files end with `.fna`, making it easy to move both. <br>
 
 As you can see, there are usually multiple ways to solve a problem in bioinformatics.
 
@@ -374,7 +381,7 @@ Grab the first 5 header lines from your fasta file with `grep` and a pipe.
 
 	grep  ">" cds_from_genomic.fna | head -5
 
-> Here we are using a pipe, designated by **`|`** to capture the output of grep and pass it to another command (**`head`**).
+> Here we are using a pipe, designated by **`|`** to capture the output of grep and pass it to another command (**`head`**). <br>
 > Piping is a really useful skill to learn for parsing and processing data more efficiently. <br>
 > Note that you can string many pipes together, if necessary. <br>
 > As is the case for most operations conducted in Linux, there are multiple ways to do things. <br>
@@ -391,7 +398,9 @@ Count the number of sequences in the fasta file using a pipe to **`wc`** instead
 <br>
 
 You'll notice that the definition lines or sequence names are quite long and include the chromosome accession, the coding sequence accession, the locus tag, the protein description, and more.
+
 For our purposes, we want to define our genes by the locus_tag.  Without the use of regular expressions and the **`sed`** command, modifying this file would be incredibly difficult and tedious.
+
 Use **`sed`** to rename the definition lines of your fasta file so that only the locus tags remain. But first, **`grep`** the definition lines so that you can view your changes more easily.
 
 
@@ -404,7 +413,7 @@ Use **`sed`** to rename the definition lines of your fasta file so that only the
 > In other words, we can use a regular expression to replace all of the patterns displayed in the sequence names, without having to search for each pattern individually, by employing our special metacharacters. <br>
 > Like **`grep`**, **`sed`** will search for your pattern line by line. It will make a replacement once (unless you specify otherwise, see the manual page). <br>
 > Here we start our search by specifying that we are looking for lines with a `>` followed by any character `.` any number of times `*`.  This is followed by the `locus_tag=` expression. <br>
-> To search for a literal period or star, we would have to exit out of or escape the metacharacter with a backslash: **`\.`** and **`\*`**.
+> To search for a literal period or star, we would have to exit out of or escape the metacharacter with a backslash: **`\.`** and **`\*`**. <br>
 > The **`\`** in front of the parentheses give the parentheses a special meaning.  It is a way of grouping information and saving it for recall later. <br>
 > With our special parenthetical notation, we are saving the locus tag information, which we notate as **`PA14_.....`**, where the periods represent any character once for the five digits associated with the tag. <br>  
 > We could also specify the digits of the locus tag like this: **`[0-9]*`** where brackets specify a range of numbers or characters and the asterisk specifies any number of times. <br>
@@ -428,14 +437,12 @@ Once you know your **`sed`** command has worked to reformat all definition lines
 
 We now have our fastq files and our reference genome and coding sequence files.  We can proceed to read mapping and quantitation.
 
-## More piping
-
-Let's try some more complicated parsing of our data using various Bash commands and pipes. 
+<br>
 
 ## Bash for loops
 
 
-Bash for loops are basically little shell scripts that can be excecuted from the command line (BASH is the command-line language we are using). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
+BASH for loops are basically little shell scripts that can be excecuted from the command line (BASH is the command-line language we are using). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
 
 <br>
 
@@ -460,12 +467,12 @@ We will try some examples in class.
 Regular expressions are search terms that incorporate special characters to make searches more powerful (both broader and more specific).
 Metacharacters have a special meaning and include:
 
-- `*` 	Star is a greedy metacharacter meaning match anything any number of times
-- `[]` Brackets are often used to specify a range of numbers or letters to include in a search pattern
-- `.` 	A period represents any character once
-- `?` 	Match one character
-- `$`		End of Line
-- `^`		Beginning of line
+- **`*`** 	Star is a greedy metacharacter meaning match anything any number of times
+- **`[]`** 	Brackets are used to specify a range of numbers or letters to include in a search pattern
+- **`.`** 	A period represents any character once
+- **`?`** 	Match one character
+- **`$`**	End of Line
+- **`^`	**	Beginning of line
 
 Usually, we escape special characters with a backslash to interpret them literally.
 
