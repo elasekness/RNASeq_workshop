@@ -467,7 +467,7 @@ Metacharacters have a special meaning and include:
 - **`.`** 	A period represents any character once
 - **`?`** 	Match one character
 - **`$`**	End of Line
-- **`^`	**	Beginning of line
+- **`^`**	Beginning of line
 
 Usually, we escape special characters with a backslash to interpret them literally.
 
