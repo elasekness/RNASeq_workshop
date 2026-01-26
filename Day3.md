@@ -51,9 +51,10 @@ Now load the packages in your R session
 
 To perform a DESeq2 analysis we will need our Salmon sf files, our `tx2gene.txt` file, and a table that specifies the conditions associated with our samples (the experimental design).
 You can manually create the table in R, Excel (exporting as a tab-delimited text file), or in any text editor, such as `nano`. 
-We'll create this file after we import our sf and tx2gene files.
+We'll create this file after we import our `sf` and `tx2gene.txt` files.
 
-If you haven't transferred your files from the VM to your computer, you can obtain copies of them here: [data-files](https://github.com/elasekness/RNASeq_workshop/tree/main/data-files)
+If you haven't transferred your files from the VM to your computer, you can obtain copies of them here: [data-files](https://github.com/elasekness/RNASeq_workshop/tree/main/data-files).
+Also, change to the directory where your files are located. For MACs, you can select the `change working directory` option from the pull-down menu of `Misc` in you **`R`** session.
 
 Import the `sf` and `tx2gene.txt` files with the `tximport()` function. 
 
@@ -62,19 +63,19 @@ Import the `sf` and `tx2gene.txt` files with the `tximport()` function.
 	tx2gene = read.table("tx2gene.txt", header=T, sep='\t')
 	txi = tximport(files, type="salmon", tx2gene=tx2gene)
 
-> The first command specifies the path to our files. <br>
+> The first command specifies the path to our files. This would be necessary if our files were not in our current working dirctory. <br>
 > The second command names the files.  **These names should be in the same order as listed in our experimental design table.** <br>
 > We import the `tx2gene.txt` file as a table or dataframe, specifying that it has a header and the columns/fields are separated by tabs. <br>
-> Finally, we create the txi object, which will summarize transcript-level abundances to the gene-level. <br>
+> Finally, we create the `txi` object, which will summarize transcript-level abundances to the gene-level. <br>
 > In our case, the abundances will not change because the transcripts are equivalent to the genes. <br>
-> **Note** including the option `countsFromAbundance=“lengthScaledTPM”` in the tximport command removes read count correlation with length as needed for the DESeq2 analysis. However, the `DESeqDataSetFromTximport()` function will do this for us when we create our DESeqDataSet object.
+> **Note** including the option `countsFromAbundance=“lengthScaledTPM”` in the `tximport` command removes read count correlation with length as needed for the DESeq2 analysis. However, the `DESeqDataSetFromTximport()` function will do this for us when we create our DESeqDataSet object.
 
-The `txi` object contains the matrices for abundance (TPM), counts, and length from our sf files. You can get the names of the matrices and access the information in the matrices with the following commands.
+The `txi` object contains the matrices for abundance (TPM), counts, and gene length. You can get the names of the matrices and access the information in the matrices with the following commands.
 
 	names(txi)
 	head(txi$counts)
 	
-> `head` returns the first few lines of the counts table, just as it does on our VMs. <br>
+> **`head`** returns the first few lines of the counts table, just as it does on our VMs with the corresponding SHELL command. <br>
 
 
 ## Create a table that specifies the experimental design.
@@ -84,9 +85,9 @@ This file will tell DESeq2 how the data should be analyzed.
 
 	ColData = data.frame(row.names=1, c("wt1", "wt2", "pqse1", "pqse2"), Condition=c("wt", "wt", "pqse", "pqse"))
 
-> `pqse` is our treatment that will be compared against our wild-type, `wt` control. <br>
-> `row.names=1` indicates that the first column of the table (gene names) contains row names, not data values.  Without this, R would create numerical row names. <br>
-> We could also import a design table from a file: `ColData = read.table("ColData.txt", header=T, row.names=1, sep='\t')`
+> **`pqse`** is our treatment that will be compared against our wild-type, **`wt`** control. <br>
+> **`row.names=1`** indicates that the first column of the table (gene names) contains row names, not data values.  Without this, R would create numerical row names. <br>
+> We could also import a design table from a file: **`ColData = read.table("ColData.txt", header=T, row.names=1, sep='\t')`**. <br>
 
 
 ## Create the DESeqDataSet object.
@@ -114,7 +115,7 @@ We need only one function to calculate the size factors and perform the normaliz
 
 	dds <- estimateSizeFactors(dds)
 
-> Normalized read counts are now saved back to the dds object. <br>
+> Normalized read counts are now saved back to the `dds` object. <br>
 
 We can retrieve the size factors with the following command:
 
@@ -125,7 +126,7 @@ We can also retrieve the normalized read counts and save them to a table.
 	head(counts(dds, normalized=T))
 	write.table(counts(dds, normalize=T), file="normalized_readcounts.txt", sep='\t', quote=F, col.names=NA)
 	
-> **Note** DESeq2 uses the raw read count data for DE analysis and models the normalization inside the Generalized Linear Model (GLM). <br>
+> **Note** `DESeq2` uses the raw read count data for DE analysis and models the normalization inside the Generalized Linear Model (GLM) so we don't have to perform the above steps at all. <br>
 
 ## Visually evaluate the quality of your data.
 
@@ -136,7 +137,7 @@ for genes that contribute most to the variation in PC1 and/or PC2.
 	rld<- rlogTransformation(dds, blind=TRUE)
 	
 > This function log-transforms our data for better separation/clustering of our data. <br>
-> Setting the `blind` option to `TRUE` ensures that the calculation is not influenced by sample information. <br>
+> Setting the **`blind`** option to **`TRUE`** ensures that the calculation is not influenced by sample information. <br>
 
 	plotPCA(rld, intgroup="Condition")
 	
@@ -145,7 +146,7 @@ for genes that contribute most to the variation in PC1 and/or PC2.
 * Based on your PCA plot, do you think we have good replicates?
 * How do you think this will influence the number of differentially expressed genes we are able to detect?
 
-You could also plot the normalized read counts of replicates against each other.
+You could also plot the normalized read counts of replicates against each other in base R.
 Ideally, all points would be close to or on the 45 degree line, indicating a 1:1 ratio of expression between replicates.
 
 	normalized_counts = counts(dds, normalize=T)
@@ -157,24 +158,24 @@ Or we can make a heatmap showing the correlation of expression values across sam
 	rld_cor <- cor(rld_matrix)
 	pheatmap(rld_cor, annotation = ColData)
 	
-> The first command retrieves the matrix of log-transformed values from the rld object. <br>
+> The first command retrieves the matrix of log-transformed values from the `rld` object. <br>
 > The second command generates the pairwise correlations among samples. <br>
-> The third command uses the pheatmap() function from the pheatmap package to make a heatmap, adding annotations from our ColData table. <br>
+> The third command uses the `**pheatmap()**` function from the [pheatmap](https://www.rdocumentation.org/packages/pheatmap/versions/1.0.12/topics/pheatmap) package to make a heatmap, adding annotations from our `ColData` table. <br>
 
-The `PCAtools` package has additional functionality for exploring our data, inlucding making PCA plots.
+The [PCAtools](https://github.com/kevinblighe/PCAtools) package has additional functionality for exploring our data, inlucding making PCA plots.
 
 	rld_matrix <- assay(rld)
 	p <- pca(rld_matrix, metadata = ColData, removeVar = 0.1)
 	biplot(p, showLoadings = TRUE, labSize = 5, pointSize = 5, sizeLoadingsNames = 5, colby="Condition")
 
 > As before, we extract the matrix of log-transformed expression values.  <br>
-> We then perform our PCA analysis and plot the results, coloring by the treatments in our 'Condition' column of our 'ColData' table.
-> Now, we show the variation among samples as well as the impact of the most influential genes on the first two principle components with the `showLoadings=TRUE` option. <br>
+> We then perform our PCA analysis and plot the results, coloring by the treatments in our `Condition` column of our `ColData` dataframe/table.
+> Now, we show the variation among samples as well as the impact of the most influential genes on the first two principle components with the **`showLoadings=TRUE`** option. <br>
 > Genes grouped together are positively correlated with each other while negatively correlated genes are displayed to the opposites sides of the plot's origin. <br>
 > The distance between the variable and the origin is positively correlated with its magnitude or representation in the data. <br>
 > This helps use to see which genes are contributing most to the variation. <br>
 
-A screeplot shows us the importance of each principle component in explaining the variation within our data.
+A `screeplot` shows us the importance of each principle component in explaining the variation within our data.
 
 	screeplot(p)
 
@@ -188,22 +189,21 @@ This requires a single function that is really performing multiple steps, includ
 	
 > DESeq2 uses a negative binomial distribution to model the read count data, which accounts for the fact that variance > mean (overdispersion).
 
-DESeq2 uses the Wald test to determine whether the expression changes observed across treatments are statistically significant 
-(the null hypothesis being that there is no change in expression between two conditions as measured by the log-fold change).
+DESeq2 uses the Wald test to determine whether the expression changes observed across treatments are statistically significant (the null hypothesis being that there is no change in expression between two conditions as measured by the log-fold change).
 
 	res = results(dds, contrast=c("Condition", "pqse", "wt"))
 	write.table(res, file="pqsE-vs-wt-results.txt", sep='\t', quote=F, col.names=NA)
 	
-> The `results()` function performs the hypothesis testing for us, comparing `pqse` to `wt`.
+> The **`results()`** function performs the hypothesis testing for us, comparing `pqse` to `wt`.
 > **Note** the order of the sample names in the contrast is important. 
 > The `res` object can be saved as a table for further inspection.
 
 The output includes:
-* `baseMean` mean of normalized counts for all samples
-*`log2FoldChange` log2fold change (in our case, a negative number indicates a decrease in expression in pqsE with respect to the wild-type condition)
-* `lfcSE` standard error of baseMean
-* `stat` Wald statistic
-* `p-value` p-value
-* `padj` FDR adjusted p-value to take into account the increase in false positives due to multiple testing
+* **`baseMean`** mean of normalized counts for all samples
+* **`log2FoldChange`** log2fold change (in our case, a negative number indicates a decrease in expression in pqsE with respect to the wild-type condition)
+* **`lfcSE`** standard error of baseMean
+* **`stat`** Wald statistic
+* **`p-value`** p-value
+* **`padj`** FDR (false-discovery rate) adjusted p-value to take into account the increase in false positives due to multiple testing
 
 Please refer to this excellent tutorial for additional explanation of the differential expression analysis with DESeq2: [hbc_training_DGE_analysis_workshop](https://hbctraining.github.io/DGE_workshop_salmon/schedule/)
