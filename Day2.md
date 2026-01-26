@@ -36,8 +36,7 @@ we could download the files directly from the SRA to our VM using the **`prefetc
 
 ## Get some basic read statistics
 
-You can generate a summmary of the quality of your data with [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), which provides nice graphics or we can use
-[SeqKit](https://bioinf.shenwei.me/seqkit/) for a more pared-down summary of our data.
+You can generate a summmary of the quality of your data with [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), which provides nice graphics or we can use [SeqKit](https://bioinf.shenwei.me/seqkit/) for a more pared-down summary of our data.
 
 	cd fastq/
 	seqkit stats wt-1-R1.fastq.gz
@@ -60,19 +59,19 @@ The long way:
 > TrimGalore will automatically detect the sequencing adapter and trim it from our reads. <br>
 > We also trim reads to a PHRED quality score of 30 (1/1000 chance of being a miscalled base), remove ambiguous bases, and only retain reads with a minimum length of 100 bp. <br>
 > The **`--paired`** option keeps R1 and R2 reads together, which is necessary for most (all?) mapping software. <br>
-> Other popular read trimming programs include [fastp](https://github.com/OpenGene/fastp) and [Trimmomatic](https://github.com/usadellab/Trimmomatic)
+> Other popular read trimming programs include [fastp](https://github.com/OpenGene/fastp) and [Trimmomatic](https://github.com/usadellab/Trimmomatic) <br>
 
 The short way:
 
 	ls *R1.fastq.gz | cut -d "_" -f 1 > seqlist
 	for filn in `cat seqlist`; do trim_galore -q 30 --length 100 --trim-n --paired $filn"_R1.fastq.gz" $filn"_R2.fastq.gz"; done
 
-> Here, we are listing all R1 fastq files and cutting them on the underscore delimiter to take the first field, which is the base name for each PE fastq file (For example, `wt-1`). <br>
-> We then save that output to a file called `seqlist`.  You can **`cat`** the seqlist file to see the results. <br>
-> The next command is the for-loop.  Instead of looping through files one-by-one, we are looping through the `seqlist` file line-by-line to obtain the basename of each PE library. <br>
+> We list all R1 fastq files and cut them on the underscore delimiter to take the first field, which is the base name for each PE fastq file (For example, `wt-1`). <br>
+> We save that output to a file called `seqlist`.  You can **`cat`** the seqlist file to see the results. <br>
+> We loop through the `seqlist` file line-by-line to obtain the basename of each PE library (instead of looping through a series of files). <br>
 > The back ticks represent a subroutine. The output of the subroutine command `cat` is being passed to the for-loop.  <br>
-> Thus, each basename in our `seqlist` file becomes a variable.  We then use this basename to specify the R1 and R2 fastq files by filling in the reminder of the unique part of each PE file's name. <br>
-> For example, `$filn` will get interpreted as `wt-1` and the file endings `"\_R1.fastq.gz"` and `"\_R2.fastq.gz"` will be interpreted literally because of the quotation marks, which gives us the full file names: `wt-1_R1.fastq.gz` and `wt-1_R2.fastq.gz`.
+> Thus, `$filn` is a variable that will represent each basename in our `seqlist` file. We use this basename to specify the R1 and R2 fastq files by filling in the reminder of the unique part of each PE file's name. <br>
+> For example, `$filn` will be interpreted as `wt-1` and the file endings `"\_R1.fastq.gz"` and `"\_R2.fastq.gz"` will be interpreted literally because of the quotation marks, which gives us the full file names: `wt-1_R1.fastq.gz` and `wt-1_R2.fastq.gz`.
 
 <br>
 
@@ -90,13 +89,13 @@ To make typing downstream commands easier, let's move our reference coding seque
 	mv fastq/*fq.gz salmon_analyses
 	mv reference_db/pa14_cds.fna salmon_analyses
 
-> Typing **`cd`** by itself returns you to your home directory (as you might have learned in tutorial 1).
+> Typing **`cd`** by itself returns you to your home directory (as you might have learned in tutorial 1). <br>
 
 Index the coding sequence file.
 
 	salmon index -t pa14_cds.fna -i salmon_index
 	
-> If you **`ls`** your directory, you'll see that salmon has put the index files to your 'transcriptome' in a sub-directory called `salmon_index`.
+> If you **`ls`** your directory, you'll see that salmon has put the index files to your 'transcriptome' in a sub-directory called `salmon_index`. <br>
 
 Quantify transcript abundance.
 
@@ -104,12 +103,11 @@ Quantify transcript abundance.
 	
 > The **`quant`** function of **`salmon`** allows direct quantification of reads agains the 'transcriptome' index and will output the results into a directory called `salmon_quant`. <br>
 > The tab-delimited output files (sf files) for each library will be in a directory named for the library basename.  <br>
-> The **`-l`** option specifies the automatic detection of the library type.  The **`--validateMappings`** option is the recommended default.  It essentially checks that the mappings are plausible enough to be quantified.
+> The **`-l`** option specifies the automatic detection of the library type.  The **`--validateMappings`** option is the recommended default.  It essentially checks that the mappings are plausible enough to be quantified. <br>
 
 
 The `Salmon` output files required for downstream analyses are the `quant.sf` files. 
-The sf file is a tab delimited text file containing the length and effective length of each transcript (effective length relating to the expectation of sampling more or less reads from a transcript), the normalized TPM (transcripts per million) values, and read counts.
-The TPM values are referred to as pseudocounts and need to be non-normalized for DESeq2 analyses.
+The sf file is a tab delimited text file containing the length and effective length of each transcript (effective length relating to the expectation of sampling more or less reads from a transcript), the normalized TPM (transcripts per million) values, and read counts. The TPM values are referred to as pseudocounts and need to be non-normalized for DESeq2 analyses.
 
 All of our sf files are currently named `quant.sf`. Let's use a for-loop to rename them according to the basename of the fastq files.
 
@@ -121,6 +119,7 @@ All of our sf files are currently named `quant.sf`. Let's use a for-loop to rena
 
 If we had true transcript data we would need to collapse our transcript-level abundances to gene-level abundances.
 The first step is to create a tab-delimited table that associates transcripts to genes (with transcript ID being placed in the first column). 
+
 In our case, transcripts and genes are the same so we will create a table with the locus tag listed twice:
 
 	TXNAME	GENEID
