@@ -294,11 +294,7 @@ For now, simply type `pseudomonas aeruginosa UCBPP-PA14`  How many entries are r
 If we didn't know the genome or assembly accession, we could use the filter drop-down menu to narrow our search. From the `filters` menu, specify that you want genomes with annotation and those 
 that are completely assembled.  This now returns one assembly. Clicking the assembly link associated with this strain brings you to a page with additional information, including various ways to download the genome and associated data.  Notice that there are GenBank and RefSeq versions of this assembly even though it is the same genome.
 
-We can download the genome in fasta file format to our computers using the `download` option at the top left of the page.
-
-However, we would then need to transfer this file from our computers to a GCP storage bucket and from the storage bucket to our VM. 
-
-An easier method to obtain these sequences would be to use one of NCBI's tools for interacting with their databases.
+We can download the genome in fasta file format to our computers using the `download` option at the top left of the page. However, we would then need to transfer this file from our computers to a GCP storage bucket and from the storage bucket to our VM. An easier method to obtain these sequences would be to use one of NCBI's tools for interacting with their databases.
 
 <br>
 
@@ -307,12 +303,12 @@ Return to your VM terminal, navigate to your `reference_db` directory, and type:
 	efetch --help
 
 > This brings up a long menu of options for the efetch tool, which can be used to download a variety of data in different formats from NCBI. <br>
-> **`esearch`** and **`efetch`** are part of Entrez Direct suite of [Eutilities]([https://www.ncbi.nlm.nih.gov/books/NBK179288/) that allow you to search NCBI databases from your terminal window. <br>
+> **`esearch`** and **`efetch`** are part of Entrez Direct suite of [Eutilities](https://www.ncbi.nlm.nih.gov/books/NBK179288/) that allow you to search NCBI databases from your terminal window. <br>
 > Relevant arguments are typically the database **`-db`** we want to search, the format **`-format`** of the data, and the **`-id`** of our query, which is the accession of a sequence of interest.
 
 <br>
 
-We can use the genome accession associated with the assembly to download the Pa14 genome.  You can obtain this accession by going back to the assembly page for Pa14 and clicking the link "view GenBank sequences." This takes you to the genome page where the accession listed is as `CP000438`. 
+We can use the genome accession associated with the assembly to download the Pa14 genome.  You can obtain this accession by going back to the assembly page for Pa14 and clicking the link `view GenBank sequences`. This takes you to the genome page where the accession listed is as `CP000438`. 
 
 	efetch -db nuccore -id CP000438 -format fasta > pa14.fasta
 	
@@ -383,9 +379,8 @@ Grab the first 5 header lines from your fasta file with `grep` and a pipe.
 
 > Here we are using a pipe, designated by **`|`** to capture the output of grep and pass it to another command (**`head`**). <br>
 > Piping is a really useful skill to learn for parsing and processing data more efficiently. <br>
-> Note that you can string many pipes together, if necessary. <br>
-> As is the case for most operations conducted in Linux, there are multiple ways to do things. <br>
-> Use the manual page for grep to find an alternative way to obtain the first five header lines (**`man grep`**).
+> Use the manual page for grep to find an alternative way to obtain the first five header lines (**`man grep`**). <br>
+> As is the case for most operations conducted in Linux, there are multiple ways to do things.
 
 <br>
 
