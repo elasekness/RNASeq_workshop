@@ -46,6 +46,8 @@ Or you can run stats on both files at the same time
 
 	seqkit stats wt-1*gz -T | csvtk pretty -t
 
+* What does piping the output of `seqkit` to `csvtk` do?
+
 <br>
 
 ## Clean your reads with [TrimGalore](https://github.com/FelixKrueger/TrimGalore).
