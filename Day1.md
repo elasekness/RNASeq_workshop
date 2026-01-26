@@ -303,7 +303,7 @@ Return to your VM terminal, navigate to your `reference_db` directory, and type:
 	efetch --help
 
 > This brings up a long menu of options for the efetch tool, which can be used to download a variety of data in different formats from NCBI. <br>
-> **`esearch`** and **`efetch`** are part of Entrez Direct suite of [Eutilities]([https://www.ncbi.nlm.nih.gov/books/NBK179288/] that allow you to search NCBI databases from your terminal window. <br>
+> **`esearch`** and **`efetch`** are part of Entrez Direct suite of [Eutilities]([https://www.ncbi.nlm.nih.gov/books/NBK179288/) that allow you to search NCBI databases from your terminal window. <br>
 > Relevant arguments are typically the database **`-db`** we want to search, the format **`-format`** of the data, and the **`-id`** of our query, which is the accession of a sequence of interest.
 
 <br>
