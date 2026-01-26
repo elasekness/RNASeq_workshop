@@ -92,8 +92,9 @@ This file will tell DESeq2 how the data should be analyzed.
 
 > **`pqse`** is our treatment that will be compared against our wild-type, **`wt`** control. <br>
 > **`row.names=1`** indicates that the first column of the table (gene names) contains row names, not data values.  Without this, R would create numerical row names. <br>
-> We could also import a design table from a file: **`ColData = read.table("ColData.txt", header=T, row.names=1, sep='\t')`**. <br>
+> We could also import a design table from a file: **`ColData = read.table("ColData.txt", header=T, row.names=1, sep='\t')`**.
 
+<br>
 
 ## Create the DESeqDataSet object.
 
@@ -104,6 +105,7 @@ We will also specify that the design formula can be found in the column entitled
 	
 > **Note** raw count data can be imported from a table as well: `dds <- DESeqDataSetFromMatrix(countData = counts, colData = ColData, design = ~ Condition)`.
 
+<br>
 
 Our DESeqDataSet object has specific slots for the different data we provide, including the original count data and the design of the study.
 
