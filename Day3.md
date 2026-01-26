@@ -71,12 +71,16 @@ Import the `sf` and `tx2gene.txt` files with the `tximport()` function.
 > In our case, the abundances will not change because the transcripts are equivalent to the genes. <br>
 > **Note** including the option `countsFromAbundance=“lengthScaledTPM”` in the `tximport` command removes read count correlation with length as needed for the DESeq2 analysis. However, the `DESeqDataSetFromTximport()` function will do this for us when we create our DESeqDataSet object.
 
+<br>
+
 The `txi` object contains the matrices for abundance (TPM), counts, and gene length. You can get the names of the matrices and access the information in the matrices with the following commands.
 
 	names(txi)
 	head(txi$counts)
 	
-> **`head`** returns the first few lines of the counts table, just as it does on our VMs with the corresponding SHELL command. <br>
+> **`head`** returns the first few lines of the counts table, just as it does on our VMs with the corresponding SHELL command.
+
+<br>
 
 
 ## Create a table that specifies the experimental design.
