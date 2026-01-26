@@ -190,7 +190,9 @@ Or we can make a heatmap showing the correlation of expression values across sam
 	
 > The first command retrieves the matrix of log-transformed values from the `rld` object. <br>
 > The second command generates the pairwise correlations among samples. <br>
-> The third command uses the `**pheatmap()**` function from the [pheatmap](https://www.rdocumentation.org/packages/pheatmap/versions/1.0.12/topics/pheatmap) package to make a heatmap, adding annotations from our `ColData` table. <br>
+> The third command uses the `**pheatmap()**` function from the [pheatmap](https://www.rdocumentation.org/packages/pheatmap/versions/1.0.12/topics/pheatmap) package to make a heatmap, adding annotations from our `ColData` table.
+
+<br>
 
 The [PCAtools](https://github.com/kevinblighe/PCAtools) package has additional functionality for exploring our data, inlucding making PCA plots.
 
