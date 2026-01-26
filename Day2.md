@@ -39,7 +39,7 @@ we could download the files directly from the SRA to our VM using the **`prefetc
 You can generate a summmary of the quality of your data with [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), which provides nice graphics or we can use [SeqKit](https://bioinf.shenwei.me/seqkit/) for a more pared-down summary of our data.
 
 	cd fastq/
-	seqkit stats wt-1-R1.fastq.gz
+	seqkit stats wt-1_R1.fastq.gz
  	seqkit stats wt-1_R2.fastq.gz
  	
 Or you can run stats on both files at the same time
