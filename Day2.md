@@ -137,3 +137,12 @@ Navigate to the location of your reference coding sequence file, which should no
 > We recall the locus tag twice in our replacement command with **`\1`** and separate the transcript name from the gene name with a tab - **`\t`**. <br>
 > You can manually add the headers `TXNAME` and `GENEID` in **`nano`** and save the output. <br>
 
+## Transfer data from VM to poject's storage bucket.
+
+The `sf` files and the `tx2gene.txt` file are necessary for our DEG analyses.  While our files are currently located on the training VMs, we will perform our DEG analyses in **`R`** on our personal computers. We need to transfer our data files from the VMs to the project's associated storage bucket.  We can then download the files directly to our computers via the storage bucket.  We will make use of GCP's [gsutil](https://docs.cloud.google.com/storage/docs/gsutil) commands (note that **`gsutil`** is a legacy package and Google now recommends using **`gcloud storage`** commands).
+
+**`gsutil`** is Python application that allows you to interact with cloud storage (the bucket) from the command line. Functions include, copying files between bucket and VM, and deleting, moving, and listing files in storage.
+
+The `gs://` prefix must be added to the path in your bucket to indicate a resoure in Cloud Storage.
+
+
