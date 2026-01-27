@@ -123,6 +123,8 @@ Quantify transcript abundance.
 The `Salmon` output files required for downstream analyses are the `quant.sf` files. 
 The sf file is a tab delimited text file containing the length and effective length of each transcript (effective length relating to the expectation of sampling more or less reads from a transcript), the normalized TPM (transcripts per million) values, and read counts. The TPM values are referred to as pseudocounts and need to be non-normalized for DESeq2 analyses.
 
+<br>
+
 All of our sf files are currently named `quant.sf`. Let's use a for-loop to rename them according to the basename of the fastq files.
 
 	for filn in `cat seqlist`; do mv $filn"/quant.sf" $filn".sf"; done
@@ -174,13 +176,15 @@ Before we can copy anything to the bucket, we need to authenticate our accounts 
 
 You can copy data to the bucket once you've successfully authenticated but before we copy anything, let's create a location in the bucket to which you can transfer your files.
 
-Navigate to `Cloud Storage` from the GCP window in your web browser. Click `Google Cloud` in the top left of the window and then the `Cloud Storage` option under `Quick access`. 
+* Navigate to `Cloud Storage` from the GCP window in your web browser. Click `Google Cloud` in the top left of the window and then the `Cloud Storage` option under `Quick access`. 
 
-Click the `Buckets` option from the menu on the left side of the page, which will show one bucket associated with the project: `wc-bms-bi-training-bucket.` 
+* Click the `Buckets` option from the menu on the left side of the page, and then click the link to the one bucket associated with the project: `wc-bms-bi-training-bucket`. 
 
-Click the link to this bucket to see its contents. Click on the folder entitled, `rnaseq_workshop0126` and then click `create folder` option to create a folder for your data.  The name of the folder should be unique so use your initials.
+* Within the bucket, click on the folder entitled, `rnaseq_workshop0126` and then click the `create folder` option to create a folder for your data.  The name of the folder should be unique so use your initials.
 
-Return to your terminal window and navigate to the location of your `sf` and `tx2gene.txt` files, if not already there (**`cd ~/rnaseq_workshop/salmon_analyses`**.  Now copy these files to your folder in the bucket.
+* Return to your terminal window and navigate to the location of your `sf` and `tx2gene.txt` files, if not already there (**`cd ~/rnaseq_workshop/salmon_analyses`**).
+
+Now copy these files to your folder in the bucket.
 
 	gsutil cp *sf gs://wc-bms-bi-training-bucket/rnaseq_workshop0126/your_initials
 	gsutil cp tx2gene.txt gs://wc-bms-bi-training-bucket/rnaseq_workshop0126/your_initials
