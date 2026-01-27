@@ -88,6 +88,8 @@ The short way:
 [Salmon](https://combine-lab.github.io/salmon/) is a 'wicked fast' program that allows the direct quantification of reads against a transcriptome (no need for an initial read mapping step). 
 We'll use the coding sequences that we downloaded as our transcripts.
 
+<br>
+
 To make typing downstream commands easier, let's move our reference coding sequence fasta file and our trimmed read files to a new directory.
 
 	cd
@@ -104,7 +106,9 @@ Index the coding sequence file. `Salmon` uses 'quasi-mapping' approach because i
 
 	salmon index -t pa14_cds.fna -i salmon_index
 	
-> If you **`ls`** your directory, you'll see that salmon has put the index files to your 'transcriptome' in a sub-directory called `salmon_index`. <br>
+> If you **`ls`** your directory, you'll see that salmon has put the index files to your 'transcriptome' in a sub-directory called `salmon_index`.
+
+<br>
 
 Quantify transcript abundance.
 
@@ -112,8 +116,9 @@ Quantify transcript abundance.
 	
 > The **`quant`** function of **`salmon`** allows direct quantification of reads agains the 'transcriptome' index and will output the results into a directory called `salmon_quant`. <br>
 > The tab-delimited output files (sf files) for each library will be in a directory named for the library basename.  <br>
-> The **`-l`** option specifies the automatic detection of the library type.  The **`--validateMappings`** option is the recommended default.  It essentially checks that the mappings are plausible enough to be quantified. <br>
+> The **`-l`** option specifies the automatic detection of the library type.  The **`--validateMappings`** option is the recommended default.  It essentially checks that the mappings are plausible enough to be quantified.
 
+<br>
 
 The `Salmon` output files required for downstream analyses are the `quant.sf` files. 
 The sf file is a tab delimited text file containing the length and effective length of each transcript (effective length relating to the expectation of sampling more or less reads from a transcript), the normalized TPM (transcripts per million) values, and read counts. The TPM values are referred to as pseudocounts and need to be non-normalized for DESeq2 analyses.
@@ -134,7 +139,9 @@ In our case, transcripts and genes are the same so we will create a table with t
 	TXNAME	GENEID
 	PA14_00010	PA14_00010
 	
-> The header names can be anything. <br>
+> The header names can be anything.
+
+<br>
 
 We can generate this table with various methods, including a combination of **`grep`** and **`sed`** commands.
 Navigate to the location of your reference coding sequence file, which should now be in the `salmon_analyses` directory.
