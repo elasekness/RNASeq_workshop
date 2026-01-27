@@ -52,7 +52,8 @@ Or you can run stats on both files at the same time
 
 ## Clean your reads with [TrimGalore](https://github.com/FelixKrueger/TrimGalore).
 
-You can process your PE fastqs one-by-one or you could execute a BASH for-loop to do the job for you.
+You can process your PE fastqs one-by-one or you could execute a BASH for-loop to do the job for you. 
+**Note** Salmon is designed so that read trimming is actually not necessary (i.e. you can use raw reads). But we'll practice here anyway.
 
 The long way:
 
