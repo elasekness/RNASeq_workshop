@@ -151,37 +151,6 @@ You can also copy the entire rnaseq_workshop directory and all of its contents t
 
 <br>
 
-## Permissions
-
-
-Directories and files have specific permissions associated with them or things that you are allowed to do to them.
-There are three permissions: 1) the ability to read (r) 2) the ability to write (w) and 3) the ability to execute (a script or program; x).
-There are three sets of permissions representing 1) the User (you), 2) the group (multiple users),
-and 3) Others (Everyone else in the world).
-
-<br>
-
-Change directories with the `cd rna_workshop` command (if you are not already in this directory) directory and examine the permissions of your 'fastq' directory.
-
-	ls -lh fastq
-
-> **`ls -l`** = long list, providing you information on when the **`fastq`** directory was created and its associated permissions. <br>
-> the **`-h`** specifies that the output be in human-readable format.
-
-<br>
-
-Change the permissions associated with your `fastq` directory with the 'chmod' command (change mode).
-
-	chmod 775 fastq
-
-> Permissions are represented by three-digit (for user, group, and other) octal numbers.
-> Here we are allowing the user and group universal permissions (7 = read, write, and execute) and all others
-> the ability to read and write only (5).
-> For more information on permissions, see: [Linux permissions](https://www.guru99.com/file-permissions.html#linux_file_ownership)
-
-<br>
-
-
 ## Manipulating files (making, (re)moving, editing, and viewing)
 
 There are many ways to make and view files in a Linux OS (operating system).
@@ -262,6 +231,35 @@ Remove a file. Let's remove files we don't need.
 
 <br>
 
+## Permissions
+
+
+Directories and files have specific permissions associated with them or things that you are allowed to do to them.
+There are three permissions: 1) the ability to read (r) 2) the ability to write (w) and 3) the ability to execute (a script or program; x).
+There are three sets of permissions representing 1) the User (you), 2) the group (multiple users),
+and 3) Others (Everyone else in the world).
+
+<br>
+
+Change directories with the `cd rna_workshop` command (if you are not already in this directory) directory and examine the permissions of your 'fastq' directory.
+
+	ls -lh fastq
+
+> **`ls -l`** = long list, providing you information on when the **`fastq`** directory was created and its associated permissions. <br>
+> the **`-h`** specifies that the output be in human-readable format.
+
+<br>
+
+Change the permissions associated with your `fastq` directory with the 'chmod' command (change mode).
+
+	chmod 775 fastq
+
+> Permissions are represented by three-digit (for user, group, and other) octal numbers.
+> Here we are allowing the user and group universal permissions (7 = read, write, and execute) and all others
+> the ability to read and write only (5).
+> For more information on permissions, see: [Linux permissions](https://www.guru99.com/file-permissions.html#linux_file_ownership)
+
+<br>
 
 ## Notes on working in a Linux environment
 
