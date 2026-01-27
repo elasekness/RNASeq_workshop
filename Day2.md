@@ -92,9 +92,11 @@ To make typing downstream commands easier, let's move our reference coding seque
 	mv fastq/*fq.gz salmon_analyses
 	mv reference_db/pa14_cds.fna salmon_analyses
 
-> Typing **`cd`** by itself returns you to your home directory (as you might have learned in tutorial 1). <br>
+> Typing **`cd`** by itself returns you to your home directory (as you might have learned in tutorial 1).
 
-Index the coding sequence file.
+<br>
+
+Index the coding sequence file. `Salmon is considered a 'quasi-mapping' approach because it estimates the number of reads mapping to a transcript without performing a base-to-base alignment.  By making use of two data structures - a suffix table and a hash array - which comprise the index, and by accounting for sample specific biases,`Salmon` is faster and more accurate than other approaches. For more information, please look at this [hbctraining tutorial](https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/08_salmon.html) and the original [Rapmap](https://pubmed.ncbi.nlm.nih.gov/27307617/) paper that describes the approach. 
 
 	salmon index -t pa14_cds.fna -i salmon_index
 	
