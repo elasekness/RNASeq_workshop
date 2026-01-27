@@ -124,9 +124,9 @@ Let's try using absolute and relative paths.
 
 Now use a relative path to copy the fastq file to where you are. This will simply overwrite the exisiting file.
 
-	cp ../../../../rnaseq_workshop/fastq/wt-1_R1.fastq.gz .
+	cp ../../../rnaseq_workshop/fastq/wt-1_R1.fastq.gz .
 
-> Notice that we had to move up four directories to get to `rnaseq_workshop`. <br>
+> Notice that we had to move up three directories to get to `rnaseq_workshop`. <br>
 > Also notice that we must always specify an end location for our copied files, which is our current location: `.`. 
 > If we specified `new-fastq_R1.fastq.gz` instead of `.`, the contents of `wt-1_R1.fastq.gz` would be written to this new file in our current location.
 
