@@ -55,6 +55,8 @@ Or you can run stats on both files at the same time
 You can process your PE fastqs one-by-one or you could execute a BASH for-loop to do the job for you. <br>
 **Note:** `Salmon` (the read quantitation program we'll use) is designed so that read trimming is not necessary (i.e. you can use raw reads). But we'll practice here anyway.
 
+<br>
+
 The long way:
 
 	trim_galore -q 30 --length 30 --trim-n --paired wt-1_R1.fastq.gz wt-1_R2.fastq.gz
@@ -62,7 +64,9 @@ The long way:
 > TrimGalore will automatically detect the sequencing adapter and trim it from our reads. <br>
 > We also trim reads to a PHRED quality score of 30 (1/1000 chance of being a miscalled base), remove ambiguous bases, and only retain reads with a minimum length of 30 bp. <br>
 > The **`--paired`** option keeps R1 and R2 reads together, which is necessary for most (all?) mapping software. <br>
-> Other popular read trimming programs include [fastp](https://github.com/OpenGene/fastp) and [Trimmomatic](https://github.com/usadellab/Trimmomatic) <br>
+> Other popular read trimming programs include [fastp](https://github.com/OpenGene/fastp) and [Trimmomatic](https://github.com/usadellab/Trimmomatic)
+
+<br>
 
 The short way:
 
@@ -96,7 +100,7 @@ To make typing downstream commands easier, let's move our reference coding seque
 
 <br>
 
-Index the coding sequence file. `Salmon is considered a 'quasi-mapping' approach because it estimates the number of reads mapping to a transcript without performing a base-to-base alignment.  By making use of two data structures - a suffix table and a hash array - which comprise the index, and by accounting for sample specific biases,`Salmon` is faster and more accurate than other approaches. For more information, please look at this [hbctraining tutorial](https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/08_salmon.html) and the original [Rapmap](https://pubmed.ncbi.nlm.nih.gov/27307617/) paper that describes the approach. 
+Index the coding sequence file. `Salmon` uses 'quasi-mapping' approach because it estimates the number of reads mapping to a transcript without performing a base-to-base alignment.  By making use of two data structures - a suffix table and a hash array - which comprise the index, and by accounting for sample specific biases,`Salmon` is faster and more accurate than other approaches. For more information, please look at this [hbctraining tutorial](https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/08_salmon.html) and the original [Rapmap](https://pubmed.ncbi.nlm.nih.gov/27307617/) paper that describes the approach. 
 
 	salmon index -t pa14_cds.fna -i salmon_index
 	
