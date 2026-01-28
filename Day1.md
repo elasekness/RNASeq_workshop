@@ -435,7 +435,7 @@ We now have our fastq files and our reference genome and coding sequence files. 
 ## Bash for loops
 
 
-BASH for loops are basically little shell scripts that can be excecuted from the command line (BASH is the command-line language we are using). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
+Bash for loops are basically little shell scripts that can be excecuted from the command line (Bash is the command-line language we are using). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
 
 <br>
 
