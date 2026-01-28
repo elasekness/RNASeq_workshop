@@ -52,7 +52,7 @@ Or you can run stats on both files at the same time
 
 ## Clean your reads with [TrimGalore](https://github.com/FelixKrueger/TrimGalore).
 
-You can process your PE fastqs one-by-one or you could execute a BASH for-loop to do the job for you. <br>
+You can process your PE fastqs one-by-one or you could execute a Bash for-loop to do the job for you. <br>
 **Note:** `Salmon` (the read quantitation program we'll use) is designed so that read trimming is not necessary (i.e. you can use raw reads). But we'll practice here anyway.
 
 <br>
@@ -189,7 +189,7 @@ Now copy these files to your folder in the bucket.
 	gsutil cp *sf gs://wc-bms-bi-training-bucket/rnaseq_workshop0126/your_initials
 	gsutil cp tx2gene.txt gs://wc-bms-bi-training-bucket/rnaseq_workshop0126/your_initials
 
-> Notice that the **`gsutil cp`** command is similar in structure to a BASH **`cp`** command. <br>
+> Notice that the **`gsutil cp`** command is similar in structure to a Bash **`cp`** command. <br>
 > Also notice that we can use metacharacters to specify multiple files. <br>
 > The `gs://` prefix must be added to the path in your bucket to indicate a resoure in Cloud Storage.
 
