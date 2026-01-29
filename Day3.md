@@ -26,7 +26,7 @@ Open an R window on your computer and install Bioconductor, DESeq2, tximport, an
 	BiocManager::install("DESeq2")
 	BiocManager::install("tximport")
 	BiocManager::install("clusterProfiler")
-	BiocManager::install('PCAtools')
+	BiocManager::install("PCAtools")
 	BiocManager::install("KEGGgraph")
 
 <br>
