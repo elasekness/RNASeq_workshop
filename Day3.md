@@ -99,7 +99,8 @@ Now create a design table that specifies the condition(s) associated with each f
 
 > **`pqse`** is our treatment that will be compared against our wild-type, **`wt`** control. <br>
 > **`row.names=1`** indicates that the first column of the table (gene names) contains row names, not data values.  Without this, R would create numerical row names. <br>
-> We could also import a design table from a file: **`ColData = read.table("ColData.txt", header=T, row.names=1, sep='\t')`**.
+> We could also import a design table from a file (found in the data-files folder of this repository:<br>
+	**`ColData = read.table("ColData.txt", header=T, row.names=1, sep='\t')`**
 
 <br>
 
