@@ -42,7 +42,7 @@ Please also install these other useful packages:
 
 Now load the packages in your R session
 
-	library(DEseq2)
+	library(DESeq2)
 	library(tximport)
 	library(clusterProfiler)
 	#library(ggplot2)
