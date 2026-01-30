@@ -34,7 +34,8 @@ Open an R window on your computer and install Bioconductor, DESeq2, tximport, an
 Please also install these other useful packages:
 
 	install.packages("ggplot2") # or install tidyverse, which includes ggplot and other useful packages
-	install.packages("tidyverse")
+	install.packages("tidyverse") # if this doesn't install, install dplyr and ggplot2
+	install.packages("dplyr")
 	install.packages("pheatmap")
 	install.packages("igraph")
 
@@ -45,8 +46,9 @@ Now load the packages in your R session
 	library(DESeq2)
 	library(tximport)
 	library(clusterProfiler)
-	#library(ggplot2)
-	install.packages(tidyverse)
+	library(ggplot2)
+	library(dplyr)
+	#library(tidyverse)
 	library(pheatmap)
 	library(PCAtools)
 	library(igraph)
