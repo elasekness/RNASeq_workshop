@@ -153,7 +153,7 @@ For now, this step has been done for you.
 
 	tmp = "pau02024.xml"
 	retrieveKGML(pathwayid="02024", organism='pau', destfile='tmp')
-	g = parseKGML2Graph(tmp, expandGenes=TRUE)
+	g = parseKGML2Graph("tmp", expandGenes=TRUE)
 
 > We retrieve the KGML file for Pseudomonas quorum sensing and parse the information to generate a graph object. <br>
 > We can plot the KEGGgraph graph or we can convert it to an `igraph` graph for additional manipulation. <br>
